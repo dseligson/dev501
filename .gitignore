@@ -1,0 +1,25 @@
+Referenced Packages/*
+.settings/*
+salesforce.schema
+.project
+*.orig
+*.keep
+*.swp
+*.bak
+src/package.xml
+src/applications
+src/email
+src/homePageLayouts
+src/labels
+src/layouts
+src/objects
+src/objectTranslations
+src/profiles
+src/remoteSiteSettings
+src/scontrols
+src/sites
+src/tabs
+src/workflows
+
+
+
