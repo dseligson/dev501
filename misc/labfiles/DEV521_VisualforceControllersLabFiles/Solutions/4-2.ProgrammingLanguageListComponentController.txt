@@ -1,0 +1,36 @@
+public class ProgrammingLanguageListComponent {
+    // Custom Component Controller Class
+
+	private Set<ID> existingLangIds = new Set<ID>();
+	private List<Programming_Language__c> langList = new List<Programming_Language__c>();
+	
+	public ID positionId {get;set;}
+	
+	public List<MyProgrammingLanguage> languages {
+		get{
+			// Return the list of Active programming languages in the org
+			// If a positionId has been specified then we also check for any languages already 
+			//	associated to the current position and set the language's "checked" property to true
+			if (positionId != null){
+				// build the set of all the language ids already associated to the position	
+				Position_Programming_Language__c[] posLangs = [select id,name,language_name__c,position__c,programming_language__c from position_programming_language__c where position__c=:positionId];
+				if (posLangs.size() > 0){
+					for(Position_Programming_Language__c ppl:posLangs){
+						existingLangIds.add(ppl.programming_language__c);	
+					}
+				}
+			}
+			// get the entire list of Programming Languages
+			if ((languages == null)||(languages.size() <= 0)) { 			
+				langList = [select id,name,language_name__c,description__c,status__c from Programming_Language__c where status__c='Active' order by language_name__c];	
+				for(Programming_Language__c language:langList){
+					MyProgrammingLanguage item = new MyProgrammingLanguage(language);
+					if (existingLangIds.contains(language.id)) { item.checked = true; }
+					languages.add(item);
+				}		
+			}
+			return languages;
+		}
+		set;
+	}
+}

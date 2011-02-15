@@ -1,0 +1,26 @@
+<apex:page controller="OutstandingReviews" sidebar="false" showHeader="true" tabStyle="Position__c">    
+  <apex:sectionHeader title="Outstanding Reviews" subtitle="{!Position.Name}"/>    
+  <apex:form >        
+    <apex:pageBlock tabStyle="Position__c" id="thePageBlock">            
+      <apex:pageBlockButtons >                 
+        <apex:commandButton action="{!createTasks}" value="Create Reminder Tasks" rerender="thePageBlock" /> 
+        <apex:commandButton action="{!sendEmails}" value="Send Reminder Emails" rerender="thePageBlock"/>
+      </apex:pageBlockButtons>
+      <apex:pageMessages />            
+      <apex:pageBlockSection showHeader="true" title="Outstanding Reviews" collapsible="false" id="reviewsSection" columns="1">                
+        <apex:pageBlockTable value="{!MyOutstandingReviews}" var="rev">                    
+          <apex:column >                        
+            <apex:facet name="header">                            
+              <apex:commandLink value="Select All" action="{!doSelectAll}" rerender="reviewsSection"/>                        
+            </apex:facet>                        
+            <apex:inputCheckbox value="{!rev.checked}"/>                    
+          </apex:column>                    
+          <apex:column headerValue="Interviewer" value="{!rev.review.interviewer__r.Employee__r.Name}" />                    
+          <apex:column value="{!rev.review.interviewer__r.Role__c}" />                    
+          <apex:column value="{!rev.review.Candidate_Name__c}"/>                    
+          <apex:column value="{!rev.review.job_application__r.name}"/>                
+        </apex:pageBlockTable>            
+      </apex:pageBlockSection>        
+    </apex:pageBlock>    
+  </apex:form>
+</apex:page>

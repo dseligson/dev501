@@ -1,0 +1,26 @@
+trigger PositionJobPostsTrigger on Position__c (after update, after delete) {
+	
+	//TODO: Create two different branches, one for each DML triggering event
+
+		//TODO: In the "update" branch, do the following:
+			//TODO: Instantiate two lists called "techPositions" and "nonTechPositions" 
+			
+			//TODO: Instantiate a Set of IDs called "nonApprovedPositionIDSet"
+
+			//TODO: Write a for loop to loop through the positions causing the trigger
+		
+				//TODO: Within that loop, create two branches, one for approved positions that have Status=Open & Sub-Status=Approved, and one for the others
+				
+					//TODO: Within the approved positions branch, verify that the department is not null
+
+						//TODO: If there is a department listed, add the position to the appropriate list (IT & Engineering = technical)
+
+					//TODO: Within the non-approved branch, add the position to the nonApprovedPositionIDSet
+	
+			//TODO: After the looping is done call the appropriate method to add the posting from the PositionJobPosts class for approved positions
+			//TODO: Then call the appropriate meothod from the same class to remove postings from non-approved positions 
+
+
+		//TODO: In the "delete" branch, remove the position posting for the positions causing the trigger
+
+}

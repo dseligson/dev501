@@ -1,0 +1,8 @@
+To Address:
+<Copy from email service address>
+
+Subject:
+New+Candidate:+Candidate
+
+Body:
+[STARTBODY]firstname=Demanding:lastname=Candidate:phone=5555555555:comment=I+WANT+A+JOB![ENDBODY] 

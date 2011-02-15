@@ -1,0 +1,37 @@
+public class PositionApproval {
+	
+	// Map from Department --> Position Approval Matrix record
+	static final Map<String,Position_Approval_Matrix__c> APPROVAL_MAP_CONST;
+	
+	static {
+		APPROVAL_MAP_CONST = getPositionApprovalMap();  // call the method that builds the Map
+	}
+	
+	private static Map<String,Position_Approval_Matrix__c> getPositionApprovalMap(){
+		// build a Map from Department --> Position Approval Matrix record
+		// TODO: Build a Map from Department --> Position Approval Matrix record
+		//       - The Map should be named "results"
+		//       - The Key of the Map should be of type String and contain Department values found on the Position Approval Matrix records
+		//       - The Value of the Map should be of type Position_Approval_Matrix__c and contain the full Position_Approval_Matrix__c record corresponding to the Department
+		
+		// TODO: Create a List called "records" and should return the approvers from the approval matrix
+		// TODO: Return the results
+	}
+	
+	// Method receives a list of positions and sets the Approver_1__c, Approver_2__c, and Approver_3__c fields using the APPROVAL_MAP_CONST
+	public static void setPositionApprovers(Position__c[] positions){
+		for (Position__c p:positions){
+			if (p.Department__c != null) {
+				if (APPROVAL_MAP_CONST.containsKey(p.Department__c)){
+					p.approver_1__c = APPROVAL_MAP_CONST.get(p.Department__c).approver_1__c;
+					p.approver_2__c = APPROVAL_MAP_CONST.get(p.Department__c).approver_2__c;
+					p.approver_3__c = APPROVAL_MAP_CONST.get(p.Department__c).approver_3__c;
+				} else {
+					p.approver_1__c = null;
+					p.approver_2__c = null;
+					p.approver_3__c = null;
+				}
+			}
+		}
+	}
+}

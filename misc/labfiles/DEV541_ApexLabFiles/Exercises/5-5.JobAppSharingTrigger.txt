@@ -1,0 +1,21 @@
+trigger JobAppSharingTrigger on Job_Application__c (after insert, after update) {
+	
+	//TODO: Instatiate two job application lists called "interviewJobApps" and "nonInterviewJobApps" 
+
+
+	//TODO: Create a for loop to loop through the triggering job applications
+
+		//TODO: If the job application stage = "Schedule Interviews" and it was not set to that value before, then add the record to the interviewJobApps list
+		//TODO: If not, and the stage is not "Schedule Interviews" then add it to the nonInterviewJobApps list
+
+	
+	//TODO: Call the appropriate method from the JobAppSharing class to add sharing for the records in the interviewJobApps list
+	//TODO: Then change the sharing for the nonInterviewJobApps to read-only
+	
+
+	if (Trigger.isInsert){
+		// Share with position hiring manager if available
+		List<Job_Application__c> jobApps = [select position__c,candidate__c,position__r.hiring_manager__c from Job_Application__c where ID IN :Trigger.newMap.keySet() and position__r.hiring_manager__c != null];
+		JobAppSharing.createSharing(jobApps,'Hiring_Manager__c','Edit');
+	}
+}

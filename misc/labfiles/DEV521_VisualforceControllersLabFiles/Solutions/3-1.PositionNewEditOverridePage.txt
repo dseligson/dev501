@@ -1,0 +1,48 @@
+<apex:page standardController="Position__c" extensions="PositionNewEditOverrideExtension" title="Sample Position Layout Page" showHeader="true" sidebar="true" >
+  <apex:sectionHeader title="{!$ObjectType.Position__c.label} Edit" subtitle="New Position"/>
+  <apex:form id="theForm"> 
+      <apex:pageMessage id="helloWorld" severity="info" summary="{!myMessage}" rendered="{!NOT(IsNull(myMessage))}"/>
+      <apex:pageBlock title="Position Detail" mode="edit" id="thePageBlock">
+        <apex:pageBlockButtons > 
+            <apex:commandButton value="Save" action="{!save}"/>
+            <apex:commandButton value="My Save" action="{!mySave}"/>
+            <apex:commandButton value="Cancel" action="{!cancel}" immediate="true"/>
+            <apex:commandButton value="Say Hello World!" action="{!sayHelloWorld}" rerender="{!$Component.theForm}" immediate="true"/>
+        </apex:pageBlockButtons>
+        <apex:actionRegion >
+        <apex:pageBlockSection title="Information" columns="2">
+            <apex:inputField value="{!Position__c.name}"/>           
+            <apex:inputField value="{!Position__c.Priority__c}"/>
+            <apex:inputField value="{!Position__c.Location__c}"/>
+            <apex:inputField value="{!Position__c.Status__c}"/>
+            <apex:inputField value="{!Position__c.Type__c}"/>
+            <apex:inputField value="{!Position__c.Sub_Status__c}"/>
+            <apex:inputField value="{!Position__c.Department__c}">
+                <apex:actionSupport event="onchange" rerender="thePageBlock"/>
+            </apex:inputField>         
+            <apex:inputField value="{!Position__c.Start_Date__c}"/>
+            <apex:inputField value="{!Position__c.Pay_Grade__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!Position__c.Hiring_Manager__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!Position__c.Duration__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:inputField value="{!Position__c.Legacy_Position_Number__c}"/>
+            <apex:pageBlockSectionItem />
+        </apex:pageBlockSection>
+        </apex:actionRegion>
+        
+        <apex:pageBlockSection id="theSection" title="Technical Skills" columns="2" rendered="{!Position__c.Department__c == 'IT' || Position__c.Department__c == 'Engineering'}">
+            <apex:inputField value="{!Position__c.Operating_Systems__c}"/>
+            <apex:inputField value="{!Position__c.Programming_Languages__c}"/>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection title="Description" columns="1">
+            <apex:inputField value="{!Position__c.Job_Description__c}" style="width:300px" />
+            <apex:inputField value="{!Position__c.Responsibilities__c}" style="width:300px" />
+            <apex:inputField value="{!Position__c.Skills_Required__c}" style="width:300px" />
+            <apex:inputField value="{!Position__c.Education__c}" style="width:300px" />
+        </apex:pageBlockSection>
+     </apex:pageBlock>
+  </apex:form>
+</apex:page>

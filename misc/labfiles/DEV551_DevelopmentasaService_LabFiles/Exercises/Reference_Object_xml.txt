@@ -1,0 +1,49 @@
+    <fields>
+        <fullName>First_Name__c</fullName>
+        <description>Reference First name</description>
+        <inlineHelpText>Reference First name</inlineHelpText>
+        <label>First Name</label>
+        <length>50</length>
+        <required>true</required>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Job_Application_Reference__c</fullName>
+        <description>Relationship to manage the references related to a Job Application</description>
+        <inlineHelpText>References related to a Job Application</inlineHelpText>
+        <label>Job Application Reference</label>
+        <referenceTo>Job_Application__c</referenceTo>
+        <relationshipLabel>References</relationshipLabel>
+        <relationshipName>References</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <type>MasterDetail</type>
+    </fields>
+    <fields>
+        <fullName>Last_Name__c</fullName>
+        <description>Reference Last name</description>
+        <inlineHelpText>Reference Last name</inlineHelpText>
+        <label>Last Name</label>
+        <length>50</length>
+        <required>true</required>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Reference_Phone_Number__c</fullName>
+        <description>Reference Phone Number</description>
+        <inlineHelpText>Reference Phone Number</inlineHelpText>
+        <label>Reference Phone Number</label>
+        <type>Phone</type>
+    </fields>
+   <fields>
+        <fullName>Email__c</fullName>
+        <description>Reference Email address</description>
+        <inlineHelpText>Reference Email address</inlineHelpText>
+        <label>Email</label>
+        <required>true</required>
+        <type>Email</type>
+   </fields>
+    <nameField>
+        <displayFormat>R-{000}</displayFormat>
+        <label>Reference Number</label>
+        <type>AutoNumber</type>
+    </nameField>

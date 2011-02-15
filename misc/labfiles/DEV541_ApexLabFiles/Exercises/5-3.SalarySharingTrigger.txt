@@ -1,0 +1,21 @@
+trigger SalarySharingTrigger on Salary__c (after insert) {
+
+	//TODO: Instantiate two salary lists called "mgrRecords" and "vpRecords"	
+
+	//TODO: Instantiate a list of the triggering salaries called "triggerRecords" which includes the following fields: position, hiring manager, department
+	
+	//TODO: Loop through the triggering salary records
+
+		//TODO: Within that loop, verify that the position is not null (if it is, add an error because the position should be required)
+
+			//TODO: If the position has a hiring manager listed, add this salary record to the mgrRecords list
+			
+			//TODO: If the position has a department listed, add this salary record to the vpRecords list
+			
+	//TODO: Close the loop.  
+
+	//TODO: If the mgrRecords list has records, call the approrpriate method in the SalarySharing class to add sharing for this record
+	
+	//TODO: Do the same for vpRecords
+
+}

@@ -1,0 +1,15 @@
+public class MyOutstandingReview{
+
+    public Boolean checked{ get; set; }    
+    public Review__c review { get; set;}
+    
+    public MyOutstandingReview(){
+        review = new Review__c();
+        checked = false;
+    }
+    
+    public MyOutstandingReview(Review__c rev){
+        review = rev;        
+        checked = false;
+    }
+}

@@ -1,0 +1,50 @@
+    <fields>
+        <fullName>Address_Error__c</fullName>
+        <inlineHelpText>If a US address is invalid, the problem is recorded in this field.</inlineHelpText>
+        <label>Address Error</label>
+        <length>255</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>AsyncValidationFlag__c</fullName>
+        <defaultValue>false</defaultValue>
+        <inlineHelpText>this field should only be set by the CandidateAddressValidation trigger and Async callout method it uses.  when this field is true that means the record is being updated by the Async method.  when it is false it means a user updated the record.</inlineHelpText>
+        <label>AsyncValidationFlag</label>
+        <type>Checkbox</type>
+    </fields>
+<fields>
+        <fullName>Congress_District__c</fullName>
+        <inlineHelpText>Identifies an area within the US served by a member of the House or Senate. If an Army/Air Force or fleet post office is used for this address, this field will be blank. If only one member of Congress within a state, the code will be AL (at large).</inlineHelpText>
+        <label>Congress District</label>
+        <length>30</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>County__c</fullName>
+        <inlineHelpText>US County</inlineHelpText>
+        <label>County</label>
+        <length>40</length>
+        <type>Text</type>
+    </fields>
+    <fields>
+        <fullName>Latitude__c</fullName>
+        <label>Latitude</label>
+        <precision>6</precision>
+        <scale>4</scale>
+        <type>Number</type>
+    </fields>
+    <fields>
+        <fullName>Longitude__c</fullName>
+        <inlineHelpText>Between 180 and -180</inlineHelpText>
+        <label>Longitude</label>
+        <precision>7</precision>
+        <scale>4</scale>
+        <type>Number</type>
+    </fields>
+    <fields>
+        <fullName>Valid_US_Address__c</fullName>
+        <defaultValue>false</defaultValue>
+        <inlineHelpText>This field is set automatically by a trigger for US addresses.  If the address is valid then the ZipCode is updated automatically to the Zip+4 format and the geocode information is stored.</inlineHelpText>
+        <label>Valid US Address</label>
+        <type>Checkbox</type>
+    </fields>

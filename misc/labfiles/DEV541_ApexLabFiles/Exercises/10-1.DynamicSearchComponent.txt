@@ -1,0 +1,47 @@
+<apex:component controller="DynamicSearch" >
+<apex:attribute name="objectName" required="true" assignTo="{!objectType}" type="String" description="The API name of the object which will be searched (ie. Account, Contact, My_Custom__c)"/>
+
+<apex:form >  
+      <apex:pageBlock > 
+      	 <apex:pageMessages />
+         <apex:pageBlockSection columns="1" collapsible="true" title="Search">
+            <apex:pageBlockSectionItem >
+               <apex:outputLabel for="searchText">Enter Criteria</apex:outputLabel>
+               <apex:panelGroup >
+                  <apex:inputText id="searchText" value="{!searchText}" size="65"/>
+                  <apex:commandButton value="Search" action="{!doSearch}" 
+                                      rerender="resultSection" status="status"/>
+                  <apex:actionStatus id="status" startText="requesting..."/>
+               </apex:panelGroup>
+            </apex:pageBlockSectionItem>  
+         </apex:pageBlockSection>        
+        <apex:pageBlockSection title="Search Results" id="resultSection" columns="1">
+        	<apex:pageBlockSectionItem >
+        	<apex:panelGroup >
+        	<table width="100%">
+        		<tbody>
+	        		<tr>
+	       				<apex:repeat value="{!fieldLabels}" var="fieldName" id="cells">
+	       					<th><apex:outputText value="{!fieldName}"/></th>
+	       				</apex:repeat>
+	        		</tr>
+	        		<apex:repeat value="{!results}" var="record" id="records" >
+	        			<tr>
+	        				<apex:repeat value="{!record.cells}" var="cell" id="cells">
+	        					<td>
+	        						<apex:commandLink rendered="{!cell.fieldName=='Name'}" action="{!gotoRecord}" value="{!cell.fieldVal}">
+	        							<apex:param name="a" assignTo="{!recordId}" value="{!record.record.id}" />
+	        						</apex:commandLink>
+	        						<apex:outputText rendered="{!cell.fieldName!='Name'}" value="{!cell.fieldVal}"/>
+	        					</td>
+	        				</apex:repeat>
+	        			</tr>
+	        		</apex:repeat>
+        		</tbody>
+        	</table>  
+        	</apex:panelGroup>
+        	</apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+     </apex:pageBlock>
+   </apex:form>
+</apex:component>

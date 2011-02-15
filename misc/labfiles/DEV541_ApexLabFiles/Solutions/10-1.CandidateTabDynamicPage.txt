@@ -1,0 +1,5 @@
+<apex:page tabStyle="Candidate__c">
+ <apex:sectionHeader title="Candidates" subtitle="Home"/>
+ <c:DynamicSearch objectName="Candidate__c"/>
+ <apex:listViews type="Candidate__c"/>
+</apex:page>

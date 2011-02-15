@@ -1,0 +1,38 @@
+public class PositionNewEditOverrideExtension{
+    // This simple extension is to demonstrate overriding the save function, and how to determine if the record
+    //   should be updated or inserted during the save operation.  This extension could be used on both
+    //   an Edit override and a New override simultaneously.
+    
+    // TODO: Declare a variable to hold the position.
+    
+    // TODO: Declare a Boolean variable to track if this is an insert or an update.
+
+    // Declare standardController controller
+    private ApexPages.StandardController controller;
+
+    // Declare a string property to hold a message value
+    public String myMessage { get; set; }
+
+    
+    // TODO: Write the extension constructor and initialize the member position variable by using a method on the standard controller.
+    // TODO: Then update the Boolean to store if this is a create or update    
+    public PositionNewEditOverrideExtension(TODO: Add the appropriate argument) {
+
+    }
+    
+    // This function is called from a commandButton on the page
+    public PageReference SayHelloWorld(){
+        // call this custom function from your visualforce page
+        myMessage = 'Hello World!';
+
+        // We're not redirecting the user to a different page so we just say return null
+        return null;
+    }
+    
+    public PageReference mysave(){
+	//TODO: Override the save function.  Check to see if this is an insert or update and use the right DML command
+        //TODO: Then navigate using the standard controller.
+
+    }
+   
+}

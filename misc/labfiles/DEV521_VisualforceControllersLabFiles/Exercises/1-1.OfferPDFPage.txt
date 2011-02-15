@@ -1,0 +1,84 @@
+﻿<apex:page standardController="Offer__c" showHeader="false" renderAs="pdf">
+    <body>
+        <center>
+        <apex:panelGrid columns="1" width="100%">
+            <apex:outputText value="TODO: Add the Company Name" styleClass="companyName"/>
+            <apex:outputText value="{!$Organization.Street}"/>
+            <apex:outputText value="{!$Organization.City}, {!$Organization.State} {!$Organization.PostalCode}"/>
+            <apex:outputText value="{!$Organization.Phone}"/>
+        </apex:panelGrid>
+        </center>
+        <p>
+            <br/><br/>
+            <apex:outputText value="{!CASE( MONTH(Offer__c.Offer_Date__c) ,
+                                            1, "January",
+                                            2, "February",
+                                            3, "March", 
+                                            4, "April", 
+                                            5, "May", 
+                                            6, "June",
+                                            7, "July",
+                                            8, "August",
+                                            9, "September",
+                                            10, "October",
+                                            11, "November",
+                                            12, "December",
+                                            "None")} {!DAY(Offer__c.Offer_Date__c)}, {!YEAR(Offer__c.Offer_Date__c)}" />
+            <br/><br/><br/>
+        </p>
+        <p>
+        <apex:panelGrid columns="1" width="100%">
+            <apex:outputText value="TODO: Add the Candidate's first and last name" styleClass="candidateName"/>
+            <apex:outputText value="{!Offer__c.Job_Application__r.Candidate__r.Street_Address_1__c}" />
+            <apex:outputText value="{!Offer__c.Job_Application__r.Candidate__r.Street_Address_2__c}" rendered="{!NOT(ISNULL(Offer__c.Job_Application__r.Candidate__r.Street_Address_2__c))}" />
+            <apex:outputText value="{!Offer__c.Job_Application__r.Candidate__r.City__c}, {!Offer__c.Job_Application__r.Candidate__r.State_Province__c}  {!Offer__c.Job_Application__r.Candidate__r.Zip_Postal_Code__c}" />
+            <apex:outputText value="{!Offer__c.Job_Application__r.Candidate__r.Country__c}" rendered="{!NOT(ISNULL(Offer__c.Job_Application__r.Candidate__r.Country__c))}" />
+            <br/>
+            <apex:outputText value="Dear {!Offer__c.Job_Application__r.Candidate__r.First_Name__c}," />
+            <apex:outputText >
+                <p>
+                I am pleased to offer you a position with Universal Containers (the "Company") as a {!Offer__c.Job_Application__r.Position__r.Name} for a start date of {!MONTH(Offer__c.Job_Application__r.Position__r.Start_Date__c)}/{!DAY(Offer__c.Job_Application__r.Position__r.Start_Date__c)}/{!YEAR(Offer__c.Job_Application__r.Position__r.Start_Date__c)}, reporting to TODO: Insert the hiring manager's name. 
+                </p><p>
+                If you decide to join us, you will receive an annual base salary of ${!ROUND(Offer__c.Actual_Salary__c,0)} less applicable withholding, which will be paid semi-monthly in accordance with the Company's normal payroll procedures.  In addition, you will be eligible to receive a discretionary {!ROUND(Offer__c.Bonus_Percentage__c,0)}% bonus based on individual performance, Company performance, and corporate matrix.  
+                </p><p>
+                Subject to approval of the Company's Board of Directors, you will be granted an option to acquire {!ROUND(Offer__c.Stock_Options__c,0)} shares of Common Stock, vesting 25% on the first anniversary of the grant date and 1/48th of the grant amount each month thereafter, so long as your employment with the Company continues. The grant price of the stock option and vesting date of the stock option will be set upon Board approval.
+                </p><p>
+                As a Company employee, you are also eligible to receive certain employee benefits. The Company reserves the right to change the benefits and compensation programs at any time. This offer expires on {!MONTH(Offer__c.Offer_Expiration_Date__c)}/{!DAY(Offer__c.Offer_Expiration_Date__c)}/{!YEAR(Offer__c.Offer_Expiration_Date__c)}, and is contingent upon the results of your background investigation.
+                </p><p>
+                If you choose to accept this offer, your employment with the Company will be voluntarily entered into and will be for no specified period. As a result, you will be free to resign at any time, for any reason or for no reason, as you deem appropriate. The Company will have a similar right and may conclude its employment relationship with you at any time, with or without cause. In addition, you will be required to gain approval from Universal Containers in the event that you are a member of or would like to participate on the board of any existing or new companies.
+                </p><p>
+                For purposes of federal immigration law, you will be required to provide the Company documentary evidence of your identity and eligibility for employment in the United States. Such documentation must be provided to us within three (3) business days of your hire date, or our employment with you may be terminated. 
+                </p><p>
+                This offer letter fully sets forth all of your compensation information and expectations, and you agree that in making your decision to join the Company you are not relying on any oral or other representations concerning any other compensation or consideration or the duration of your employment with the Company, including but not limited to any value associated with your stock options.
+                </p><p>
+                To indicate your acceptance of the Company’s offer, please sign and date this letter in the space provided below and return it to me. A duplicate original is enclosed for your records. You will be required to sign an Employee Inventions and Proprietary Rights Assignment Agreement as a condition of your employment. This letter, along with any agreements relating to proprietary rights between you and the Company, set forth the terms of your employment with the Company and supersede any prior representations or agreements, whether written or oral. This letter may not be modified or amended except by a written agreement, signed by the Company and by you.
+                </p><p>
+                If you accept this job offer, your hire date will be on the day that you attend new-hire orientation. Plan to work for the remainder of the business day after new-hire orientation ends. 
+                </p><p>
+                {!Offer__c.Additional_Instructions__c}
+                </p><p>
+                We look forward to working with you at Universal Containers. Welcome aboard!
+                </p><p>
+                Best Regards,
+                </p><p>
+                <br/>
+                <br/>
+                <br/>
+                ________________________________
+                <br/>
+                TODO: Add the positions's recruiter name (which is the owner of the position)
+                <br/>
+                Hiring Coordinator, Human Resources
+                </p><p>
+                <br/>
+                <h4>Accept Job Offer</h4>
+                By signing and dating this letter below, I, {!Offer__c.Job_Application__r.Candidate__r.First_Name__c} {!Offer__c.Job_Application__r.Candidate__r.Last_Name__c}, accept the job offer of {!Offer__c.Job_Application__r.Position__r.Name} by Universal Containers.
+                <br/>
+                Signature:__________________________________ Date:_____________
+                </p>
+            </apex:outputText>
+        </apex:panelGrid>
+        </p>
+    </body>
+</apex:page>
+

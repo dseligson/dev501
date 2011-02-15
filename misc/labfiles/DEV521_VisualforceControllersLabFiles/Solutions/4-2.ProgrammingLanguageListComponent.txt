@@ -1,0 +1,16 @@
+<apex:component controller="ProgrammingLanguageListComponent">
+<apex:attribute name="records" type="MyProgrammingLanguage[]" required="false" assignTo="{!Languages}" description="this is the list of intersection records to be displayed"/> 
+<apex:attribute name="posId" type="String" required="false" assignTo="{!positionId}" description="if specified, languages already associated to the position will be pre-checked"/> 
+<apex:attribute name="var" type="String" description="The variable to represent a single item in the iteration."/> 
+
+  <apex:repeat value="{!Languages}" var="oneLang"> 
+    <apex:componentBody > 
+      <apex:variable var="{!var}" value="{!oneLang}"/> 
+      <apex:outputPanel > 
+        <apex:inputCheckbox value="{!oneLang.checked}" id="theCheckbox" /> 
+        <apex:outputLabel value="{!oneLang.theRecord.Language_Name__c}"/> 
+      </apex:outputPanel> 
+     <br/> 
+    </apex:componentBody> 
+  </apex:repeat> 
+</apex:component>

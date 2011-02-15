@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Candidate Submission via Email</title>
+		<script type="text/javascript">
+			function validate(){
+				if (document.getElementById('lastname').value != '') {
+					
+					var body = document.getElementById('body');
+					
+					body.value = "[STARTBODY]"; // 11 CHARS
+					body.value += "firstname=" + document.getElementById('firstname').value;
+					body.value += ":lastname=" + document.getElementById('lastname').value;
+					body.value += ":phone=" + document.getElementById('phone').value;
+					body.value += ":comment=" + document.getElementById('comment').value;
+					body.value += "[ENDBODY]"; // 9 CHARS
+					
+					var subj = document.getElementById('subject');
+					subj.value = "New Candidate: ";
+					subj.value += document.getElementById('lastname').value;
+					
+					var serviceAddress = document.getElementById('serviceAddress');
+					var actionString = "mailto:" + serviceAddress.value;
+					
+					var theForm = document.forms[0];		
+					theForm.action = actionString;
+					
+					return true;
+				} else {
+					alert('Last Name is required');
+					return false;
+				}
+			}
+		</script>
+		<style>
+			td.label {text-Align: right;}
+			td.data {text-Align: left;}
+			td.button {text-Align: center;}
+		</style>
+	</head>
+	<body>
+		<h1>Universal Containers</h1>
+		<div id="main">
+			<p>We are always looking for talented professionals to join our company.  
+			If you think you have what it takes then please send us an email using this form.</p>
+			<p>
+				<form id="emailForm" onsubmit="return validate();" method="get" >
+					<table>
+						<tr>
+							<td class="label">Email Service Address:</td>
+							<td class="data"><input id="serviceAddress" type="text" size="75" /></td>
+						</tr>
+						<tr>
+							<td class="label">First Name:</td>
+							<td class="data"><input id="firstname" type="text"/></td>
+						</tr>
+						<tr>
+							<td class="label">Last Name:</td>
+							<td class="data"><input id="lastname" type="Text"/></td>
+						</tr>
+						<tr>
+							<td class="label">Phone:</td>
+							<td class="data"><input id="phone" type="text"/></td>
+						</tr>
+						<tr>
+							<td class="label">Comments:</td>
+							<td class="data"><textarea id="comment" cols="50" rows="8"></textarea></td>
+						</tr>
+						<tr>
+							<td colspan="2" class="button"><input type="submit" value="Submit" /></td>
+						</tr>
+					</table>
+					<input type="hidden" name="subject" id="subject" />
+					<input type="hidden" name="body" id="body" />
+				</form>			
+			</p>
+		</div>
+	</body>
+</html>

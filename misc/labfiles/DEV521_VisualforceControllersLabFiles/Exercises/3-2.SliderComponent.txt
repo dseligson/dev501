@@ -1,0 +1,29 @@
+<apex:component>
+    <!-- a re-usable flash slider component that does not use a controller.-->
+    <script language="JavaScript" type="text/javascript">
+        function updateHiddenValue(value, eId){          
+            var e = document.getElementById(eId);
+            e.value = value;
+        }
+    </script>
+    <apex:attribute name="startValue" description="This is the starting value for the slider.  Useful when including the slider in Edit pages."
+        type="Integer" required="false" />
+    <apex:attribute name="min" description="This is minimum value of the slider."
+        type="Integer" required="true"/>
+    <apex:attribute name="max" description="This is maximum value of the slider."
+        type="Integer" required="true"/>
+    <apex:attribute name="snapInterval" description="This is interval value the user can move the slider."
+        type="Integer" required="false" default="1" />
+    <apex:attribute name="callbackFunction" description="This is the name of the javascript function that will be passed the slider value and the passthroughId value upon the slider change event.  By default this component calls a javascript function it contains called updateHiddenValue.  The updateHiddenValue function receives the slider value and passthroughId and updates the passthroughId element to hold the slider value."
+        type="String" required="false" default="updateHiddenValue" />
+    <apex:attribute name="passthroughId" description="This is the $Component id of the DOM element bound to the slider value.  The passthroughId will be passed to the callbackFunction along with the value of the slider upon the slider change event."
+        type="String" required="false"/>
+    <apex:attribute name="bgColor" description="This is the background color value of the slider, such as #FFFFFF.  The default is a light grey color commonly found in standard Salesforce pages."
+        type="String" required="false" default="#F3F3EC" />
+    <apex:attribute name="height" description="This is height value of the slider."
+        type="Integer" required="false" default="40" />
+    <apex:attribute name="width" description="This is width value of the slider."
+        type="Integer" required="false" default="175" />
+    
+    <apex:flash flashVars="startValue={!startValue}&min={!min}&max={!max}&snapInterval={!snapInterval}&callbackFunction={!callbackFunction}&passthroughId={!passthroughId}&bgColor={!bgColor}" src="{!$Resource.flashSlider}" height="{!height}" width="{!width}" />                       
+</apex:component>

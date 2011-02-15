@@ -1,0 +1,84 @@
+public class JobAppWizardTest {
+	
+	public static testMethod void testMyController() {
+		// Testing the New Job Application Wizard
+        	// TODO: Instantiate the controller (call it "controller")
+		// TODO: Instantiate the extension (call it "extension")
+        	// TODO: Instantiate the job application from the extension (call it "jobApp")
+		
+		// Verify that page fails without specifying a Position
+     		// TODO: Test that trying to move to step 2 without specifying a position fails
+		
+		// Add parameters to page URL
+        	// TODO: Add a position id to the URL (using any position) 
+		
+        	// TODO: Instantiate a new extension with all parameters in the page
+        	// TODO: Instantiate a new job application from this controller and pick up the new URL with the position id
+
+		System.assertEquals(Page.jobappstep2.getURL(),pageTwo);
+		
+		// verify getter/setter works for SearchText
+		extension.searchText='Paul*';
+		System.assertEquals(extension.searchText,'Paul*');
+		
+		// create a bunk candidate to use for sosl search test
+		Candidate__c cand = new Candidate__c(first_name__c = 'Sammy', last_name__c = 'Bakersfield', email__c ='s@bakersfield.com');
+		insert cand;
+		
+		// the following 3 lines are special; for testing SOSL in testMethods
+		//	see the Apex PDF for more info on SOSL in testMethods
+		Id [] fixedSearchResults = new Id[] {cand.id};
+		Test.setFixedSearchResults(fixedSearchResults);
+		// now we do the controller's sosl search
+		extension.doSearch();
+		// verify the results of the search		
+		List<Candidate__c> results = extension.results;
+		System.debug('results=' + results);
+		System.assert(results.size() > 0);
+		System.assertNotEquals(results[0].email__c,null);
+		System.assertEquals(results[0].last_name__c,cand.last_name__c);
+		
+		// now let's simulate the user selecting one of the candidates from the search results
+		extension.candidateId = results[0].id;
+		String pageThree = extension.selectCandidate().getUrl();
+		// make sure the page transferred to step 3 upon selecting the candidate
+		System.assertEquals(Page.jobappstep3.getURL(), pageThree);
+		// make sure the candidate was set by the selectCandidate() method
+		Candidate__c cand2 = extension.candidate;
+		System.assertNotEquals(cand2.last_name__c,null);
+		
+		// move back to page 2 and validate the toggle to creating a brand new candidate
+		pageTwo = extension.step2().getUrl();
+		System.assertEquals(Page.jobappstep2.getURL(), pageTwo);
+		extension.showSearch = false;
+		extension.NewCandidate();
+		// candidateId should be null now
+		System.assertEquals(extension.candidateId,null);
+		cand = extension.candidate;
+		// candidate should be empty now
+		System.assertEquals(cand.last_name__c,null);
+		 
+		// now let's simulate the user filling out the new candidate form and move to page 3
+		cand = new Candidate__c(first_name__c = 'Mike',
+							 	last_name__c = 'Reuben',
+							 	email__c = 'mike@reuben.com');
+		extension.candidate = cand;
+		pageThree = extension.step3().getUrl();
+		System.assertEquals(Page.jobappstep3.getURL(), pageThree);
+		
+		// now let's run the save() and verify the new candidate and job_application creation
+		System.debug('candidate=' + extension.candidate);
+		jobApp = extension.jobApplication;
+		// run the save()
+		String saveUrl = extension.save().getUrl();
+		// get the latest candidate and verify it
+		cand = extension.candidate;
+		System.assertNotEquals(cand.id,null);
+		// get the latest jobApp and verify it
+		jobApp = extension.jobApplication;
+		System.assertEquals(jobApp.Candidate__c,cand.id);
+		System.assertNotEquals(jobApp.id,null);
+		// verify the Url after the save() method occurred
+		System.assertEquals(saveUrl,extension.controller.view().getURL());
+	}
+}

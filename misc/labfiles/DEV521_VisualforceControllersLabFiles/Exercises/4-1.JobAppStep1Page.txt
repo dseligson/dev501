@@ -1,0 +1,17 @@
+<apex:page standardController="Job_Application__c" extensions="JobAppWizard" tabStyle="Job_Application__c">
+  <apex:includeScript value="{!$Resource.utilityJS}" />
+  <apex:sectionHeader title="Job Application" subtitle="Step 1 of 3"/>
+  <apex:form > 
+      <apex:pageBlock id="theBlock" title="Job Application Edit" mode="edit">
+          <apex:pageBlockButtons >
+              <apex:commandButton action="{!step2}" value="Next"/>
+              <apex:commandButton action="{!cancel}" value="Cancel" onclick="return confirmCancel()" immediate="true" style="margin-left: 2em"/>
+          </apex:pageBlockButtons>
+          <apex:pageBlockSection title="Information" columns="1">
+              <apex:inputField value="{!JobApplication.Status__c}"/>
+              <apex:inputField value="{!JobApplication.Stage__c}"/>
+              <apex:inputField value="{!JobApplication.Position__c}" required="true"/>
+          </apex:pageBlockSection>
+      </apex:pageBlock> 
+  </apex:form>
+</apex:page>

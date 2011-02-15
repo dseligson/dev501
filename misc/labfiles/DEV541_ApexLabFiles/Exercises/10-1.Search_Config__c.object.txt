@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>false</defaultValue>
+        <inlineHelpText>Only one Active config record is allowed per Salesforce object.</inlineHelpText>
+        <label>Active</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Fields__c</fullName>
+        <inlineHelpText>API field name of the fields to be displayed in custom search results.  Should be listed in comma separated order of appearance.  Name field must be first.  (ie. Name,AccountNumber,CustomField__c,...).</inlineHelpText>
+        <label>Fields</label>
+        <length>32000</length>
+        <type>LongTextArea</type>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Object_Name__c</fullName>
+        <inlineHelpText>API Name of the Salesforce Object</inlineHelpText>
+        <label>Object Name</label>
+        <length>100</length>
+        <required>true</required>
+        <type>Text</type>
+    </fields>
+    <label>Search Config</label>
+    <nameField>
+        <displayFormat>SC-{000}</displayFormat>
+        <label>Search Config Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Search Configs</pluralLabel>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

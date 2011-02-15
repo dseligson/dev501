@@ -1,0 +1,11 @@
+public class HelloWorldPositionClass {
+	
+	/*TODO: Declare a static method that takes a list of positions*/  {
+
+		for (Position__c p:positions){
+			if (p.Hello__c != 'World') {
+				/*TODO: Assign the value of "World" to the Hello field on the position*/; 
+			}
+		}
+	}
+}

@@ -1,0 +1,69 @@
+<apex:page controller="InterviewerPicker" tabStyle="Position__c" showHeader="true" sidebar="true" id="thePage" >
+ <style>
+     .th { font-weight: bold; }
+ </style>
+
+  <apex:sectionHeader title="Position: {!Position.Name}" subtitle="Interview Team Picker"/>
+  <apex:form >
+  <apex:actionFunction name="setRoleVal" action="{!changeRole}" reRender="selectedEmployee" status="applyStatus">
+      <apex:param name="b" assignTo="{!Role}" value=""/>
+  </apex:actionFunction>
+  <apex:pageBlock id="block">
+      <apex:pageBlockButtons >
+          <apex:commandButton action="{!cancel}" value="Done" />
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection title="Current Interview Team" collapsible="false" id="theChosen">
+          <apex:panelGrid columns="4" cellpadding="5" cellspacing="5" width="100%" id="outputGrid">
+                  <apex:outputText value="Functional" styleClass="th"/>
+                  <apex:outputText value="Technical" styleClass="th"/>
+                  <apex:outputText value="General" styleClass="th"/>
+                  <apex:outputText value="Managerial" styleClass="th"/>
+                  <apex:outputText value="{!Functional.Employee__r.Name}"  id="fId"/>                     
+                  <apex:outputText value="{!Technical.Employee__r.Name}" id="tId"/>             
+                  <apex:outputText value="{!General.Employee__r.Name}" id="gId"/>            
+                  <apex:outputText value="{!Managerial.Employee__r.Name}" id="mId"/> 
+          </apex:panelGrid>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Selected Employee" collapsible="false" id="selectedEmployee" columns="3">
+          <apex:pageBlockTable value="{!Selected}" var="si" id="selectedPBTable">
+              <apex:column headerValue="Employee">
+                  <apex:outputField value="{!si.Employee__c}"/>
+              </apex:column>
+              <apex:column headerValue="Role">
+                  <apex:inputField value="{!si.Role__c}" id="theSelectedRole" onchange="setRoleVal(this.value);"/>
+              </apex:column>
+              <apex:column headerValue="Apply Changes">
+                  <apex:commandButton value="Apply" action="{!doUpdateInterviewers}" rerender="block" status="applyStatus"/>
+                  <apex:actionStatus id="applyStatus" startText="updating..."/>
+              </apex:column>
+          </apex:pageBlockTable>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Employee Search" collapsible="false" id="employeeSearch" columns="1">
+          <apex:outputPanel layout="searchBlock" style="padding:5px 0px;margin-bottom:5px;background-color:#D9D9D9"> 
+                <apex:outputLabel style="padding:0px 5px;font-size:95%;font-weight:bold;font-family: 'Verdana','Geneva',sans-serif;" value="Search" for="searchText"/>                                         
+                <apex:inputText id="searchText" value="{!searchText}" size="50"/>
+                <apex:commandButton value="Search" action="{!doSearch}" rerender="results" status="status"/>
+                <apex:actionStatus id="status" startText="requesting..."/>
+          </apex:outputPanel>    
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Employee Search Results" id="results" columns="1" collapsible="false" >
+              <apex:pageBlockTable value="{!results}" var="u" id="thePBTable" >    
+                  <apex:column headerValue="Action"> 
+                  	  <apex:commandButton action="{!changeSelected}" reRender="selectedEmployee" value="Select">
+      				  	<apex:param name="a" assignTo="{!ApplyInterviewerId}" value="{!u.id}"/>
+      		  	  </apex:commandButton>
+                  </apex:column>             
+                  <apex:column headerValue="Employee Name">                   
+                      <apex:outputText value="{!u.name}"/>
+                  </apex:column>                  
+                  <apex:column headerValue="Interview Dept">
+                          <apex:outputText value="{!u.Interview_Dept__c}"/>                   
+                  </apex:column>         
+                  <apex:column headerValue="Title">
+                          <apex:outputText value="{!u.title}"/>                   
+                  </apex:column>        
+              </apex:pageBlockTable>          
+      </apex:pageBlockSection>
+  </apex:pageBlock>
+  </apex:form>
+</apex:page>

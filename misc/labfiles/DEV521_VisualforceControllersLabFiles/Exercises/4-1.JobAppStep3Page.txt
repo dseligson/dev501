@@ -1,0 +1,39 @@
+<apex:page standardController="Job_Application__c" extensions="JobAppWizard" tabStyle="Job_Application__c" action="{!checkPosition}">
+  <apex:includeScript value="{!$Resource.utilityJS}" />
+  <apex:sectionHeader title="Job Application" subtitle="Step 3 of 3"/>
+  <apex:form > 
+      <apex:pageBlock id="theBlock" title="Job Application and Candidate" mode="detail">
+          <apex:pageBlockButtons >
+              <apex:commandButton action="{!step2}" value="Previous"/>
+              <apex:commandButton action="{!save}" value="Save"/>
+              <apex:commandButton action="{!cancel}" value="Cancel" onclick="return confirmCancel()" immediate="true" style="margin-left: 2em"/>
+          </apex:pageBlockButtons>
+          <apex:pageMessages />
+          <apex:pageBlockSection title="Job Application" columns="1" collapsible="false">
+              <apex:outputField value="{!JobApplication.Status__c}"/>
+              <apex:outputField value="{!JobApplication.Stage__c}"/>
+              <apex:outputField value="{!JobApplication.Position__c}"/>
+          </apex:pageBlockSection>                      
+          <apex:pageBlockSection title="Candidate Information" columns="2" id="candInfo" collapsible="false">
+              <apex:outputField value="{!Candidate.First_Name__c}"/>
+              <apex:outputField value="{!Candidate.Phone__c}"/>
+              <apex:outputField value="{!Candidate.Last_Name__c}" />
+              <apex:outputField value="{!Candidate.Mobile__c}"/>
+              <apex:pageBlockSectionItem >
+                  <apex:outputText value=""/>
+              </apex:pageBlockSectionItem>
+              <apex:outputField value="{!Candidate.Email__c}" />      
+              <apex:pageBlockSectionItem >
+                  <apex:outputText value=""/>
+              </apex:pageBlockSectionItem>
+          </apex:pageBlockSection>    
+          <apex:pageBlockSection showHeader="false" columns="1">
+              <apex:outputField value="{!Candidate.Street_Address_1__c}"/>
+              <apex:outputField value="{!Candidate.Street_Address_2__c}" />
+              <apex:outputField value="{!Candidate.City__c}"/>
+              <apex:outputField value="{!Candidate.State_Province__c}"/>
+              <apex:outputField value="{!Candidate.Zip_Postal_Code__c}"/>
+          </apex:pageBlockSection>     
+      </apex:pageBlock> 
+  </apex:form>
+</apex:page>

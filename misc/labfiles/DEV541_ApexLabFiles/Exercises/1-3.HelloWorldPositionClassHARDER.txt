@@ -1,0 +1,12 @@
+public class HelloWorldPositionClass {
+	
+	/*TODO: Declare a static method that takes a list of positions*/  {
+
+		for (Position__c p:positions){
+			/*TODO: Create an if statement that checks to see if the Hello field contains the value 'World' */
+
+				/*TODO: If true, assign the value of "World" to the Hello field on the position*/; 
+			
+		}
+	}
+}

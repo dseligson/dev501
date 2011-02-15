@@ -1,0 +1,7 @@
+trigger HelloWorldPositionTrigger on Position__c (before insert, before update) {
+
+	//TODO: Instantiate a list of positions and assign the context of Trigger.new
+
+	//TODO: Call the class in the HelloWorldPositionClass, passing in the list of positions
+	
+}

@@ -1,0 +1,4 @@
+trigger PositionApprovalTrigger on Position__c (before insert, before update) {
+	// TODO: call the setPositionApprovers method in the PositionApproval class, passing in the updated records of the Trigger; this can be completed in one line of code
+	
+}

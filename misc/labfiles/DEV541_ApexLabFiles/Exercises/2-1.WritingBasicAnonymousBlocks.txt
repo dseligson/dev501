@@ -1,0 +1,44 @@
+//--------------------------------------------------------------------------------------------
+//TASK 1: Create a Hello World anonymous block.
+//TODO: Write a single line to output the text "Hello World!" to the results window
+
+
+//--------------------------------------------------------------------------------------------
+//TASK 2: Create a map of integers and check if the map contains a specific key.
+//TODO: Instantiate a map called “numbers” that has an integer as keys and a string as values.
+
+
+//TODO: Create a FOR loop that loops 100 times and adds the values 0 thru 99 as the key and the string value of the number as the value of the map.
+
+
+//TODO: Create an IF statement that verifies that the map contains the value 35 and display the value using a System.debug statement.
+
+
+
+//--------------------------------------------------------------------------------------------
+//TASK 3: Create a list of new accounts with unique names.
+//TODO: Instantiate a list of Account data types
+
+
+//TODO: Create a loop to add 20 new accounts to the list with a unique name for each account.
+
+
+//TODO: Create a FOR loop to display the name of each account in your list using System.Debug.
+
+
+
+//--------------------------------------------------------------------------------------------
+//TASK 4: Create a set of date data check to see if it contains a specific day.  
+//TODO: Instantiate a Set of Date data types called myDates.
+
+
+//TODO: Create a FOR loop that adds the next 100 days to the Set starting with Today’s date.
+
+
+//TODO: Create a date variable called Birthday that contains the date of your next birthday.
+
+
+//TODO: Write an IF statement that tests to see if myDates contains the value of birthday.
+
+//--------------------------------------------------------------------------------------------
+

@@ -1,0 +1,73 @@
+<apex:page standardController="Job_Application__c" extensions="JobAppWizard" tabStyle="Job_Application__c" action="{!checkPosition}">
+  <apex:includeScript value="{!$Resource.utilityJS}" />
+  <apex:sectionHeader title="Job Application" subtitle="Step 2 of 3"/>
+  <apex:form id="theForm" > 
+      <apex:pageBlock id="theRadioBlock" title="Choose" mode="edit">
+          <apex:pageMessages />
+          <apex:pageBlockButtons location="top" >
+              <apex:commandButton action="{!step1}" value="Previous"/>
+              <apex:commandButton action="{!step3}" value="Next" rendered="{!NOT(ShowSearch)}"/>
+              <apex:commandButton action="{!cancel}" value="Cancel" onclick="return confirmCancel()" immediate="true" style="margin-left: 2em"/>
+          </apex:pageBlockButtons>
+          <apex:pageBlockSection collapsible="false" title="Search or New" id="searchOrNew" columns="1">
+              <apex:selectRadio value="{!ShowSearch}">
+                  <apex:selectOption itemValue="true" itemLabel="Search for Existing Candidate"/>
+                  <apex:selectOption itemValue="false" itemLabel="Create New Candidate" />
+                  <apex:actionSupport rerender="theForm" event="onclick" action="{!NewCandidate}"/>
+              </apex:selectRadio>
+          </apex:pageBlockSection>
+      </apex:pageBlock>
+      <apex:pageBlock id="theSearchBlock" title="Specify Candidate" mode="edit" rendered="{!ShowSearch}">
+          <apex:pageBlockButtons location="bottom" >
+              <apex:commandButton action="{!step1}" value="Previous"/>
+              <apex:commandButton action="{!step3}" value="Next" rendered="{!NOT(ShowSearch)}"/>
+          </apex:pageBlockButtons>
+          <apex:pageBlockSection title="Candidate Search" collapsible="false" id="candSearch" columns="1">
+              <apex:outputPanel layout="searchBlock" style="padding:5px 0px;margin-bottom:5px;background-color:#D9D9D9"> 
+                    <apex:outputLabel style="padding:0px 5px;font-size:95%;font-weight:bold;font-family: 'Verdana','Geneva',sans-serif;" value="Enter Candidate Last Name" for="searchText"/>                                         
+                    <apex:inputText id="searchText" value="{!searchText}" size="50" />
+                    <apex:commandButton value="Search" action="{!doSearch}" rerender="results" status="status"/>
+                    <apex:actionStatus id="status" startText="requesting..."/>
+              </apex:outputPanel>    
+          </apex:pageBlockSection>
+          <apex:pageBlockSection title="Candidate Search Results" id="results" columns="1" collapsible="false" >
+              <apex:pageBlockTable value="{!results}" var="c" id="thePBTable" >    
+                  <apex:column headerValue="Action"> 
+                      <apex:commandLink action="{!SelectCandidate}" value="Select" >
+                        <apex:param name="a" assignTo="{!candidateId}" value="{!c.Id}"/>
+                      </apex:commandLink>
+                  </apex:column>             
+                  <apex:column value="{!c.First_Name__c}"/>
+                  <apex:column value="{!c.Last_Name__c}"/>   
+                  <apex:column value="{!c.Email__c}"/>
+                  <apex:column value="{!c.Phone__c}"/>
+                  <apex:column value="{!c.City__c}"/>
+                  <apex:column value="{!c.State_Province__c}"/>
+              </apex:pageBlockTable> 
+         </apex:pageBlockSection> 
+       </apex:pageBlock>
+       <apex:pageBlock id="theCandidateBlock" title="New Candidate" mode="edit" rendered="{!NOT(ShowSearch)}">  
+          <apex:pageBlockButtons location="bottom" >
+              <apex:commandButton action="{!step1}" value="Previous"/>
+              <apex:commandButton action="{!step3}" value="Next"/>
+          </apex:pageBlockButtons>               
+          <apex:pageBlockSection title="Candidate Information" columns="2" id="candInfo" collapsible="false">
+              <apex:inputField value="{!Candidate.First_Name__c}"/>
+              <apex:inputField value="{!Candidate.Phone__c}"/>
+              <apex:inputField value="{!Candidate.Last_Name__c}" />
+              <apex:inputField value="{!Candidate.Mobile__c}"/>
+              <apex:pageBlockSectionItem >
+                  <apex:outputText value=""/>
+              </apex:pageBlockSectionItem>
+              <apex:inputField value="{!Candidate.Email__c}" />      
+          </apex:pageBlockSection>    
+          <apex:pageBlockSection title="Address Info" columns="1">
+              <apex:inputField value="{!Candidate.Street_Address_1__c}"/>
+              <apex:inputField value="{!Candidate.Street_Address_2__c}" />
+              <apex:inputField value="{!Candidate.City__c}"/>
+              <apex:inputField value="{!Candidate.State_Province__c}"/>
+              <apex:inputField value="{!Candidate.Zip_Postal_Code__c}"/>
+          </apex:pageBlockSection>
+      </apex:pageBlock> 
+  </apex:form>
+</apex:page>

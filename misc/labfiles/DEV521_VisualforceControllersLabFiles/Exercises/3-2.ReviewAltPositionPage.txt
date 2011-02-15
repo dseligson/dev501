@@ -1,0 +1,96 @@
+<apex:page standardController="Review__c" extensions="reviewAltPositionExtension" >   
+    <apex:sectionHeader title="{!$ObjectType.Review__c.label}" subtitle="{!Review__c.name}"/>
+    <apex:form id="theForm"> 
+        <apex:pageBlock mode="edit" title="Review Edit" id="reviewBlock" >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" immediate="true"/>
+            </apex:pageBlockButtons>
+            <apex:pageMessages />
+            <apex:pageBlockSection id="info" showHeader="true" title="Information" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recommend For Hire"/>
+                    <apex:selectRadio value="{!Review__c.Recommend_for_Hire__c}">
+                        <apex:selectOption itemValue="true" itemLabel="Yes"/>
+                        <apex:selectOption itemValue="false" itemLabel="No"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Reason_Recommended__c}" style="width:300px"/>
+                <apex:outputField value="{!Review__c.Position_Name__c}" rendered="{!IF(bUpdate,true,false)}"/>
+                <apex:inputField value="{!Review__c.Job_Application__c}"/>
+                <apex:outputField value="{!Review__c.Candidate_Name__c}" rendered="{!IF(bUpdate,true,false)}"/>           
+                <apex:inputField value="{!Review__c.Interviewer__c}"/>
+                <apex:inputField value="{!Review__c.Review_Completed__c}" rendered="{!IF(bUpdate,true,false)}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="scores" showHeader="true" title="Scores" columns="1">
+                <apex:inputHidden id="cFit" value="{!Review__c.Cultural_Fit__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Cultural Fit"/>                                            
+                    <c:slider startValue="{!Review__c.Cultural_Fit__c}" min="1" max="5" passthroughId="{!$Component.scores.cFit}" />
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Cultural_Comments__c}" style="width:300px"/>
+                <apex:inputHidden id="exp" value="{!Review__c.Experience__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Experience"/>                                            
+                    <c:slider startValue="{!Review__c.Experience__c}" min="1" max="5" passthroughId="{!$Component.scores.exp}" />
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Experience_Comments__c}" style="width:300px"/>
+                <apex:inputHidden id="leadership" value="{!Review__c.Leadership_Skills__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Leadership Skills"/>                      
+                    <c:slider startValue="{!Review__c.Leadership_Skills__c}" min="1" max="5" passthroughId="{!$Component.scores.leadership}" />                                          
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Leadership_Comments__c}" style="width:300px"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recommend for Alternate Position?"/>
+                    <apex:inputCheckbox value="{!showAltPosition}">
+                    	<apex:actionSupport event="onchange" rerender="theForm" status="showAltStatus" />
+                    </apex:inputCheckbox>      
+                </apex:pageBlockSectionItem>       
+                <apex:actionStatus startText="(rendering position information...)" id="showAltStatus"/> 
+            </apex:pageBlockSection>   
+         <apex:actionRegion >
+         <apex:pageBlockSection rendered="{!showAltPosition}" id="altPositionBlock" title="Select the Alternate Position" columns="1">
+            	<apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Step 1. Choose Department" />
+                    <apex:selectList value="{!SelectedDept}" size="1">
+                        <apex:selectOptions value="{!DeptOptions}" />
+                        <apex:actionSupport reRender="positionList" event="onchange" status="positionStatus" />
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Step 2. Choose Position" />
+                    <apex:panelGroup >
+	                    <apex:selectList value="{!SelectedPositionId}" id="positionList" size="1">
+	                        <apex:selectOptions value="{!PositionOptions}" />
+	                        <apex:actionSupport reRender="SelectedPositionBlock" event="onchange" status="positionStatus"/>
+	                    </apex:selectList> 
+	                    <apex:actionStatus startText="(retrieving position information...)" id="positionStatus"/> 
+                    </apex:panelGroup>                
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Step 3. Note to Recruiter" />
+                    <apex:inputTextArea value="{!recruiterTask.Description}" cols="100" rows="5" />                
+                </apex:pageBlockSectionItem>                            
+            </apex:pageBlockSection>
+       		<apex:pageBlockSection id="SelectedPositionBlock" rendered="{!showAltPosition}" title="Detail Information" columns="2">
+	            <apex:outputField value="{!SelectedPosition.name}"/>
+	            <apex:pageBlockSectionItem />
+	            <apex:outputField value="{!SelectedPosition.Location__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Priority__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Type__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Status__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Department__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Sub_Status__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Pay_Grade__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Start_Date__c}"/>
+	            <apex:outputField value="{!SelectedPosition.Hiring_Manager__c}"/>
+	            <apex:pageBlockSectionItem />
+	            <apex:outputField value="{!SelectedPosition.Duration__c}"/>
+	            <apex:pageBlockSectionItem />
+	            <apex:outputField value="{!SelectedPosition.Days_Opened__c}"/>
+	        </apex:pageBlockSection>
+	        </apex:actionRegion>	        
+        </apex:pageBlock>      
+    </apex:form>
+</apex:page>

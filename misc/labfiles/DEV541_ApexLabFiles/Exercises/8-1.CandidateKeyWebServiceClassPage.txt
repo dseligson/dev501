@@ -1,0 +1,211 @@
+<apex:page >
+//Note that if the org password is NOT 'password1' that you will need to change it twice below!
+<script type="text/javascript" src="/js/functions.js"></script>
+<script src="/soap/ajax/17.0/connection.js"></script>
+<script src="/soap/ajax/17.0/apex.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+function validate(){
+    sforce.connection.init("{!$API.Session_ID}", "{!$Api.Partner_Server_URL_140}");
+    // do the pre-save validation here and then when finished call the save() function
+    var ok2Go = true;
+
+    // 1. We have a few checks to do...
+    var ps = document.getElementById("posSelector");
+    if (ps.options.length != 0){
+        var posId = ps.options[ps.selectedIndex].value;
+    }
+
+    // a. check the a posId was selected
+    if ((posId == null)||(posId == "")) {
+        alert("A position must be selected");
+        ok2Go = false;
+    }
+    // b. now check that the required fields were filled out
+    var ln = document.forms["refForm"].elements["lastname"].value; 
+    if ((ln == "")||(ln == null)){
+        alert("Last name is required");
+        ok2Go = false;
+    }
+    var email = document.forms["refForm"].elements["email"].value; 
+    if ((email == "")||(email == null)){
+        alert("Email is required");
+        ok2Go = false;
+    }
+
+    if (ok2Go) {
+        save(posId);
+    } else {
+        return false;
+    } 
+}
+
+function doDescribeGlobal(){
+    try{
+        var dgResults = sforce.connection.describeGlobal();
+    } catch (e) {
+        sforce.debug.open();
+        sforce.debug.log(e);
+    }
+
+    return dgResults;
+}
+
+function doDescribeSObject(entity){
+    try{
+        var dso = sforce.connection.describeSObject(entity);
+    }catch (e) {
+        sforce.debug.open();
+        sforce.debug.log(e);
+    }
+    return dso;
+}
+
+function clearSelect(name){
+    // Clear out the options array of the Select corresponding the name passed in
+    var sel = document.getElementById(name);
+
+    while (sel.length > 0){
+    sel.remove(0);
+}
+}
+
+function deptChanged(department){
+    // When a new Department is selected, setup the posSelector listbox
+    sforce.connection.init("{!$API.Session_ID}", "{!$Api.Partner_Server_URL_140}");
+    
+
+    // 1. Clear out the original posSelector listbox
+    clearSelect("posSelector");
+
+    // 2. Query for the 1st batch of open positions of the selected department
+    var qStr = "select Id, Name, Location__c, Department__c, Type__c, Status__c from Position__c where Status__c='Open' and Department__c = '" + department + "'";
+    try{ 
+        var queryResults = sforce.connection.query(qStr); 
+        if (queryResults != null){ 
+            if (queryResults.size > 0){ 
+                var records = queryResults.getArray('records'); 
+            }
+        } 
+    } catch (e){ 
+        sforce.debug.open();
+        sforce.debug.log(e);
+    } 
+
+    // 3. Loop through the positions and build the posSelector
+    var ps = document.getElementById("posSelector");
+    if (records != null){
+        for (var i=0; i<records.length; i++) {
+            var optNew = document.createElement('option');
+            optNew.value = records[i].Id;
+            optNew.text = records[i].Name + " : " + records[i].Location__c + " : " + records[i].Type__c;
+            try {
+                ps.add(optNew, null); // standards compliant; doesn't work in IE
+            
+            } catch(ex) {
+                ps.add(optNew); // IE only
+            }
+        }
+    }
+}
+
+function save(posId){
+    // this function will use the Apex Code "submitEmployeeReferral" custom WebService call to attempt to create a JobApp & maybe Candidate
+    var candidate = new sforce.SObject("Candidate__c");
+    candidate.First_Name__c = document.forms["refForm"].elements["firstname"].value; 
+    candidate.Last_Name__c = document.forms["refForm"].elements["lastname"].value; 
+    candidate.Phone__c = document.forms["refForm"].elements["phone"].value; 
+    candidate.Mobile__c = document.forms["refForm"].elements["mobile"].value; 
+    candidate.Email__c = document.forms["refForm"].elements["email"].value; 
+
+    // perform the webservice call
+    try {
+        var success = sforce.apex.execute("CandidateKeyWebService","submitEmployeeReferral",{a:posId,b:candidate});
+
+        if (success != null) {
+        if (success == "true") {
+            document.body.innerHTML = "<h1>Referral Successfully Submitted. Thank You!</h1><br/><br/><br/><br/>";
+        } else { 
+            document.body.innerHTML = "<h1>Temporarily unable to submit referrals. Please try again later.</h1><br/><br/><br/><br/>";
+        }
+        } else { sforce.debug.trace = true; }
+    } catch(e) {
+        sforce.debug.trace = true;
+        sforce.debug.open();
+        sforce.debug.log(e);
+    }
+}
+</script>
+
+<form id="refForm" name="refForm">
+    <table ID="Table1">
+        <tr>
+            <th colspan="2">
+                Department</th><th colspan="2">Open Positions</th>
+        </tr>
+
+        <tr>
+            <td>Choose:</td>
+            <td>
+                <select id="deptSelector" type="select-one" size="1" NAME="deptSelector" onchange="javascript:deptChanged(this.options[this.selectedIndex].text);">
+                    <option value="none">-- None --</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="IT">IT</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Support">Support</option>
+                    <option value="Sales">Sales</option>
+                </select>
+            </td>
+            <td>Choose:</td>
+            <td>
+                <select id="posSelector" NAME="posSelector" type="select-one" size="1"></select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">&nbsp;<br /></td>
+        </tr>
+            <td colspan="1"><h3>Candidate Info:</h3></td>
+            <td colspan="3">&nbsp;</td>
+        <tr>
+        </tr>
+
+
+
+    <!-- create a Candidate info entry form -->
+    </table>
+    
+    <table id="candidate">
+        <tr>
+            <td>First Name:</td><td><input type="text" id="firstname" /></td><td>Phone:</td><td><input type="text" id="phone" /></td>
+        </tr>
+        <tr>
+            <td><font color="#ff2222">Last Name:</font></td>
+            <td><input type="text" id="lastname" /></td>
+            <td>Mobile:</td>
+            <td><input type="text" id="mobile" /></td>
+        </tr>
+        <tr>
+            <td><font color="#ff2222">Email:</font></td>
+            <td><input type="text" id="email" /></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Resume:</td><td>
+            <input type="file" id="resume" name="resume" /></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="4"><br /></td>
+        </tr>
+
+    <!-- the next </td> is the end of the element in which I create the Candidate tabble-->
+
+    <table cellpadding="0" cellspacing="0" border="0" ID="Table2">
+        <tr>
+            <td class="pbTitle"><img src="/s.gif" alt="" width="1" height="1" class="minWidth" title="" />&nbsp;</td>
+            <td class="pbButtonb"><input value=" Save " class="btn" type="button" title="Save" name="save" onclick='javascript:validate();' ID="Button1" /></td>
+        </tr>
+    </table>
+    </table>
+</form>
+</apex:page>

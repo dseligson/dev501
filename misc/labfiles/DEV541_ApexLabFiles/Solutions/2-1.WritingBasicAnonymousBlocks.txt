@@ -1,0 +1,57 @@
+//--------------------------------------------------------------------------------------------
+//TASK 1: Create a Hello World anonymous block.
+//TODO: Write a single line to output the text "Hello World!" to the results window
+System.debug('Hello World!');
+
+//--------------------------------------------------------------------------------------------
+//TASK 2: Create a map of integers and check if the map contains a specific key.
+//TODO: Instantiate a map called “numbers” that has an integer as keys and a string as values.
+Map<Integer, String> numbers = new Map<Integer, String>();
+
+//TODO: Create a FOR loop that loops 100 times and adds the values 0 thru 99 as the key and the string value of the number as the value of the map.
+for (Integer i=0; i<100; i++){
+  numbers.put(i, String.valueof(i));
+}
+
+//TODO: Create an IF statement that verifies that the map contains the value 35 and display the value using a System.debug statement.
+if (numbers.containskey(35)){
+   System.debug('The answer is: ' + numbers.get(35));
+}
+
+//--------------------------------------------------------------------------------------------
+//TASK 3: Create a list of new accounts with unique names.
+//TODO: Instantiate a list of Account data types
+List<Account> accts = new List<Account>();
+
+//TODO: Create a loop to add 20 new accounts to the list with a unique name for each account.
+for (Integer i=0; i<20; i++){
+  Account a = new Account(name='Account Name' + i);
+  accts.add(a);
+}
+
+//TODO: Create a FOR loop to display the name of each account in your list using System.Debug.
+for(Account acct:accts){
+    system.debug('The account name is: ' + acct.name);
+}
+
+//--------------------------------------------------------------------------------------------
+//TASK 4: Create a set of date data check to see if it contains a specific day.  
+//TODO: Instantiate a Set of Date data types called myDates.
+Set<Date> myDates = new Set<Date>();
+
+//TODO: Create a FOR loop that adds the next 100 days to the Set starting with Today’s date.
+for(integer i = 0; i < 100; i++){
+  myDates.add(Date.today().addDays(i));
+}
+
+//TODO: Create a date variable called Birthday that contains the date of your next birthday.
+Date birthday = Date.parse('12/31/2010');
+
+//TODO: Write an IF statement that tests to see if myDates contains the value of birthday.
+if (myDates.contains(birthday)){
+  System.debug('yes');
+} else {
+  System.debug('no');
+}
+//--------------------------------------------------------------------------------------------
+

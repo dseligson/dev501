@@ -1,0 +1,41 @@
+@isTest
+private class HelloWorldTestClass {
+
+	//TODO: Create a test method
+
+		User adminuser = [SELECT id from User where alias = 'AUser'];
+		List<Position__c> positions = new List<Position__c>();
+		for (Integer i=0; i < 20; i++){
+			Position__c p = new Position__c();
+			p.Name = 'testName' + i;
+			p.Job_Description__c = 'testDescription' + i;
+			p.Hiring_Manager__c= adminuser.id;
+			positions.add(p);
+		}
+		
+		//TODO: Wrap the following section in a try block
+
+			System.debug('Attempting to insert positions');
+			//TODO: Insert Positions
+			System.debug('Insert complete');
+
+			// refresh the Position list to include the Hello__c field after the insert
+			
+			//TODO: Create a position map to hold position IDs
+
+
+			//TODO: Write a SOQL statement to retrieve id, name and Hello_c into positions based on the IDs in the position map
+			
+
+			//TODO: Write a loop to iterate through the positions object
+			//TODO: Inside the loop: ensure position id is not null and hello field contains 'World' 
+			//TODO: Inside the loop: write position id, name and Hello__c value to the debug log 
+			
+
+			//TODO: Wrap the following section in a catch block
+			System.debug('We caught a DML exception: ' + e.getDmlMessage(0));	
+
+		
+	}
+	
+}

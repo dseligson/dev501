@@ -1,0 +1,150 @@
+public class PositionLanguageListExtension{
+    // Extension class used for Position__c Edit/New overrides to handle the use of checkboxes
+    //	to represent Position_Programming_Languages__r
+	
+    private Position__c pos;
+    private Boolean bUpdate = true;
+    private ApexPages.standardController controller {get;set;}
+    
+    public List<MyProgrammingLanguage> langs {
+    	get{
+    		if (langs == null) langs = new List<MyProgrammingLanguage>();
+    		return langs;
+    	}
+    	set;
+    }
+    
+    public List<Position_Programming_Language__c> posLangs {
+    	// this function will return a List of all Position_Programming_Language__c records
+    	//	that are associated to the current Position
+    	get{
+    		// query for any existing Position_Programming_Language records related to this Position
+	        if (bUpdate) {
+	            posLangs = [select id,name,language_name__c,position__c,programming_language__c from position_programming_language__c where position__c=:pos.id];
+	            //posLangs = pos.Position_Programming_Languages__r;
+	        } else {
+	            posLangs = new List<Position_Programming_Language__c>();    
+	        }        
+	        return posLangs;
+    	}
+    	set;	
+    }
+    
+    // the Key will be the Id of Programming_Language__c records
+    // the Value will be a corresponding Position_Programming_Language__c record
+    private Map<ID,Position_Programming_Language__c> existingPositionLangMap;
+
+	// contstructor, the member variable pos will represent the Position record on the Page
+    public PositionLanguageListExtension(ApexPages.StandardController stdController) {
+        controller = stdController;
+        this.pos= (Position__c)stdController.getRecord();
+        if (pos.id == null) { bUpdate = false; }      
+    }
+    
+    // utility method that builds a Map<ID,Position_Programming_Language__c> of programming languages already associated to the Position
+    // Key: Id of a Programming_Language__c record that is associated to the Position
+    // Value: The Position_Programming_Language__c record that relates the Programming_Language__c to the Position__c
+    public void buildLanguageMap(){
+    	if (existingPositionLangMap == null) { 
+    		existingPositionLangMap = new Map<ID,Position_Programming_Language__c>();
+	    	for (Position_Programming_Language__c posLang:posLangs){
+	    		Boolean bFound = false;
+	    		Integer iCount = 0;
+	    		while((!bFound)&&(iCount < langs.size())){
+	    			if (langs[iCount].theRecord.id == posLang.Programming_Language__c){
+	    				bFound = true;
+	    			} else {
+	    				iCount++;
+	    			}
+	    		}
+	    		if (bFound) {
+	    			existingPositionLangMap.put(langs[iCount].theRecord.id,posLang);
+	    		}
+	    	}
+    	}
+    }
+    
+    // this is the save override performed by the Page.  there are several branches of logic
+    //	in this method.  First, is this a New Position or an Update to an existing Position?
+    //	Second, for each MyPPL checked on the Page we have to either do a Delete,Insert,or do
+    //	nothing with the MyPPL.
+    public PageReference save() {
+    	
+		// create to empty lists for inserting/deleting Position_Programming_Language__c records
+        List<Position_Programming_Language__c> insertPPLs = new List<Position_Programming_Language__c>();
+        List<Position_Programming_Language__c> deletePPLs = new List<Position_Programming_Language__c>();
+		
+		// is this an update to an existing position?
+        if (bUpdate){  
+        	// make sure we have a map of the current languages associated to the position
+    		buildLanguageMap();          
+        	// Loop through all the Programming Languages and take the appropriate action 
+        	// 	based on the "checked" property of each, and whether a Position_Programming_Language__c 
+        	// 	record already existed before the User edited the page 
+            for (MyProgrammingLanguage lang:langs) {
+            	// check if the corresponding Position_Programming_Language__c record already existed for this record prior to this save
+                if (existingPositionLangMap.containsKey(lang.theRecord.id)){
+                    // yes, the ppl already existed so we either do nothing or we delete the record based on the checked property
+                    if (lang.checked == true) {
+                    	// do nothing
+                    } else {
+                    	// delete it
+                        deletePPLs.add(existingPositionLangMap.get(lang.theRecord.id));
+                    }
+                } else {
+                	// no, the Position_Programming_Language__c didn't exist, this is a new one
+                	//  so we either insert it or do nothing based on the checked property
+                    if (lang.checked == true) {
+                    	// insert it
+                        Position_Programming_Language__c rec = new Position_Programming_Language__c();
+                        rec.Programming_Language__c = lang.theRecord.id;
+                        rec.Position__c = pos.id;	
+                        insertPPLs.add(rec);
+                    } else {
+                    	// do nothing
+                    }
+                }               
+            }
+            try{
+            	System.debug('***insertPPLs: ' + insertPPLs.size());
+            	System.debug('***deletePPLs: ' + deletePPLs.size());
+                update pos;
+                delete deletePPLs;
+                insert insertPPLs;
+            } catch (Exception e) {
+                System.debug(e);
+            }
+        } else {
+            // this is a New Position
+            //  first we need to insert the Position so we can link the PPLs to it
+            try{
+                insert pos;
+                // Re-instantiate the controller to be based off the new Position (that now has an ID)
+                controller = new ApexPages.standardController(pos);
+            } catch (Exception e) {
+                System.debug(e);
+            }
+            // now we need to loop through the MyPPLs and set the Position__c field on all the PPLs
+            for (MyProgrammingLanguage lang:langs) {
+            	// the ppl didn't exist before, this is a new one so we either insert it or do nothing based on the checked property
+                if (lang.checked) {
+                    // create a PPL for insert
+                    Position_Programming_Language__c rec = new Position_Programming_Language__c();
+                    rec.Position__c = pos.id;
+                    rec.Programming_Language__c = lang.theRecord.id;
+                    insertPPLs.add(rec);
+                } else {
+                    // do nothing
+                }           
+            }
+            // perform the PPL insert
+            try{
+                insert insertPPLs;
+            } catch (Exception e) {
+                System.debug(e);
+            }
+        }
+        // now navigate to the position record detail page
+        return controller.view();
+    }
+}

@@ -1,0 +1,20 @@
+<apex:page standardController="Job_Posting_Site__c" extensions="SOAIpLookup" sidebar="false">
+<apex:sectionHeader title="Job Posting Site" subtitle="IP Lookup"/>
+<apex:form >
+	<apex:pageBlock id="theBlock">
+		<apex:pageBlockButtons >
+              <apex:commandButton action="{!strikeIronIpCheck}" value="IP Lookup" rerender="info" status="status"/>
+        	  <apex:actionStatus id="status" startText=" sending SOAP request..."/>
+        </apex:pageBlockButtons>
+		<apex:pageBlockSection id="info" columns="1">
+			<apex:outputField value="{!Job_Posting_Site__c.name}"/>
+			<apex:outputField value="{!Job_Posting_Site__c.Job_Site_Name__c}"/>
+			<apex:outputField value="{!Job_Posting_Site__c.URL__c}"/>
+			<apex:pageBlockSectionItem >
+				<apex:outputLabel value="IP Address"/>
+				<apex:outputText value="{!IPAddress}"/>
+			</apex:pageBlockSectionItem>
+		</apex:pageBlockSection>
+	</apex:pageBlock>
+</apex:form>
+</apex:page>

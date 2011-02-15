@@ -1,0 +1,29 @@
+trigger JobAppSharingTrigger on Job_Application__c (after insert, after update) {
+	
+	// If Status=Open && Stage=Schedule Interviews then share job apps
+	// 	and candidates with the position interviewer team
+	List<Job_Application__c> interviewJobApps = new List<Job_Application__c>();
+	List<Job_Application__c> nonInterviewJobApps = new List<Job_Application__c>();
+	for (Job_Application__c jobApp : Trigger.new){
+
+		if ((Trigger.isUpdate) && (jobapp.stage__c == 'Schedule Interviews') && (Trigger.oldMap.get(jobapp.id).stage__c != 'Schedule Interviews')){ 
+			interviewJobApps.add(jobapp); 
+		} 
+		else if ((Trigger.isInsert) && (jobapp.stage__c == 'Schedule Interviews') ) { 
+			interviewJobApps.add(jobapp); 
+		} 
+		else if (jobApp.Stage__c != 'Schedule Interviews') {
+			nonInterviewJobApps.add(jobApp); 
+		} // else do nothing with the record
+	}
+	// Add Edit sharing for interviewers
+	JobAppSharing.createSharing(interviewJobApps,'Position_Interviewer__c','Edit');
+	// remove Edit sharing for interviewers
+	JobAppSharing.createSharing(nonInterviewJobApps,'Position_Interviewer__c','Read');
+	
+	if (Trigger.isInsert){
+		// Share with position hiring manager if available
+		List<Job_Application__c> jobApps = [select position__c,candidate__c,position__r.hiring_manager__c from Job_Application__c where ID IN :Trigger.newMap.keySet() and position__r.hiring_manager__c != null];
+		JobAppSharing.createSharing(jobApps,'Hiring_Manager__c','Edit');
+	}
+}

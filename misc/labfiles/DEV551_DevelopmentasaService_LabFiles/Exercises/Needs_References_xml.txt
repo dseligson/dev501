@@ -1,0 +1,8 @@
+<fields>
+        <fullName>Needs_References__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Does this Job Application need references for further follow up?</description>
+        <inlineHelpText>Check this field on to tag this Job Application so that references can be requested.</inlineHelpText>
+        <label>Needs References</label>
+        <type>Checkbox</type>
+</fields>

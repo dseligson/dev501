@@ -1,0 +1,130 @@
+	static testMethod void testReferenceDupPreventer() {
+
+		// First make sure there are no references already in the system
+		// that have the email addresses used for testing
+		Set<String> testEmailAddress = new Set<String>();
+		testEmailAddress.add('test1@duptest.com');
+		testEmailAddress.add('test2@duptest.com');
+		testEmailAddress.add('test3@duptest.com');
+		testEmailAddress.add('test4@duptest.com');
+		testEmailAddress.add('test5@duptest.com');
+		System.assert([SELECT count() FROM Reference__c WHERE Email__c IN :testEmailAddress] == 0);
+		
+		// Retrieve a Job Application
+		Job_Application__c jobApp = getJobApplication();
+			
+		// Seed the database with some references, and make sure they can be bulk inserted successfully.
+		Reference__c reference1 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Smith', First_Name__c='John', Email__c='john_test1@duptest.com');
+		Reference__c reference2 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Jones', First_Name__c='Joe',  Email__c='joe_test2@duptest.com');
+		Reference__c reference3 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Adams', First_Name__c='Jill', Email__c='jill_test3@duptest.com');		
+		Reference__c[] references = new Reference__c[] {reference1, reference2, reference3};
+		insert references;
+		System.debug(Logginglevel.ERROR,  'Test References inserted');
+		
+		// Now make sure that some of these references can be changed and then bulk updated successfully. 
+		// Note that reference1 is not being changed, but is still being passed to the update call. This should be OK.
+		reference2.Email__c = 'joe_test4@duptest.com';
+		reference3.Email__c = 'jill_test5@duptest.com';
+		update references;
+		System.debug(Logginglevel.ERROR,  'Test References updated');
+		
+		// Make sure that single row reference duplication prevention works on insert.
+		Reference__c dup1 = new Reference__c(Last_Name__c='Adams', First_Name__c='Jill', Email__c='jill_test5@duptest.com');
+		try {
+			insert dup1;
+			System.assert(false);
+		} catch (System.DmlException e) {
+			System.assert(e.getNumDml() == 1);
+			System.assert(e.getDmlIndex(0) == 0);
+			System.assert(e.getDmlFields(0).size() == 1);
+			System.debug(Logginglevel.ERROR,  'Insert Failed - Duplicate Reference');
+		}
+		
+		// Make sure that single row reference duplication prevention works on update.
+		dup1 = new Reference__c(Id = reference1.Id, Last_Name__c='Jones', First_Name__c='Joe', Email__c='joe_test4@duptest.com');
+		try {
+			update dup1;
+		} catch (System.DmlException e) {
+			System.assert(e.getNumDml() == 1);
+			System.assert(e.getDmlIndex(0) == 0);
+			System.assert(e.getDmlFields(0).size() == 1);
+			System.debug(Logginglevel.ERROR,  'Update Failed - Duplicate Reference');			
+		}
+		
+		// Make sure that bulk reference duplication prevention works on insert. Note that the first item being inserted is fine,
+		// but the second and third items are duplicates. Note also/ that since at least one record insert fails, the entire
+		// transaction will be rolled back.
+		dup1 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Leah', First_Name__c='Jim', Email__c='jim_test6@duptest.com');
+		Reference__c dup2 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Smith', First_Name__c='John', Email__c='john_test1@duptest.com');
+		Reference__c dup3 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Jones', First_Name__c='Joe',  Email__c='joe_test4@duptest.com');
+		Reference__c[] dups = new Reference__c[] {dup1, dup2, dup3};
+		try {
+			insert dups;
+		} catch (System.DmlException e) {
+			System.assert(e.getNumDml() == 2);
+			System.assert(e.getDmlIndex(0) == 1);
+			System.assert(e.getDmlFields(0).size() == 1);
+			System.assert(e.getDmlIndex(1) == 2);
+			System.assert(e.getDmlFields(1).size() == 1);
+			System.debug(Logginglevel.ERROR,  'Insert Failed - Duplicate Reference');			
+		}
+		
+		// Make sure that bulk reference duplication prevention works on update. Note that the first item being updated is fine,
+		// because the email address is new, and the second item is also fine, but in this case it's because the email
+		// address doesn't change. The third case is flagged as an error because it is a duplicate of the email address of the
+		// first reference's value in the database, even though that value is changing in this same update call. It would be an
+		// interesting exercise to rewrite the trigger to allow this case. Note also that since at least one record update
+		// fails, the entire transaction will be rolled back.
+		dup1 = new Reference__c(Id=reference1.Id, Email__c='james_test7@duptest.com');
+		dup2 = new Reference__c(Id=reference2.Id, Email__c='john_test1@duptest.com');
+		dup3 = new Reference__c(Id=reference3.Id, Email__c='test1@duptest.com');
+		dups = new Reference__c[] {dup1, dup2, dup3};
+		try {
+			update dups;
+		} catch (System.DmlException e) {
+			System.debug(e.getNumDml());
+			System.debug(e.getDmlMessage(0));
+			System.assert(e.getNumDml() == 1);
+			System.assert(e.getDmlFields(0).size() == 1);
+			System.debug(Logginglevel.ERROR,  'Update Failed - Duplicate Reference');			
+		}
+		
+		// Make sure that duplicates in the submission are caught when inserting references. Note that this test also catches an
+		// attempt to insert a reference where there is an existing duplicate.
+		dup1 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Smith', First_Name__c='John', Email__c='john_test1@duptest.com');
+		dup2 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Jones', First_Name__c='Joe',  Email__c='joe_test4@duptest.com');
+		dup3 = new Reference__c(Job_Application_Reference__c = jobApp.Id, Last_Name__c='Adams', First_Name__c='Jill', Email__c='jill_test5@duptest.com');
+		dups = new Reference__c[] {dup1, dup2, dup3};
+		try {
+			insert dups;
+		} catch (System.DmlException e) {
+			System.debug(Logginglevel.ERROR,  'Insert Failed - Duplicate Reference');
+		}
+			
+		// Make sure that duplicates in the submission are caught when updating references. Note that this test also catches an attempt
+		// to update a reference where there is an existing duplicate.
+		dup1 = new Reference__c(Id=reference1.Id, Email__c='john_test1@duptest.com');
+		dup2 = new Reference__c(Id=reference2.Id, Email__c='joe_test4@duptest.com');
+		dup3 = new Reference__c(Id=reference3.Id, Email__c='jill_test5@duptest.com');
+		dups = new Reference__c[] {dup1, dup2, dup3};
+		try {
+			update dups;
+		} catch (System.DmlException e) {
+			System.assert(e.getNumDml() == 2);
+			System.assert(e.getDmlIndex(0) == 1);
+			System.assert(e.getDmlFields(0).size() == 1);
+			System.assert(e.getDmlIndex(1) == 2);
+			System.assert(e.getDmlFields(1).size() == 1);
+			System.debug(Logginglevel.ERROR,  'Update Failed - Duplicate Reference');			
+		}
+	}
+	
+	static  Job_Application__c getJobApplication(){
+		System.debug(Logginglevel.INFO,  'Getting a Job Application object');
+		Job_Application__c jobApp;
+		//Get a Job Application to pass in to Reference inserts/updates
+		for (Job_Application__c a : [Select j.Id From Job_Application__c j where j.name = 'APP-0001']) {
+		    jobApp = a;
+		}
+		return jobApp;
+	}
