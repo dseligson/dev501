@@ -1,0 +1,3 @@
+<!-- TODO: Add a page tag with the appropriate controller -->
+
+<!-- TODO: Add the following related lists: OpenActivities, ActivityHistory, NotesAndAttachments, and Job_Applications__r -->

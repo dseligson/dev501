@@ -1,0 +1,53 @@
+<apex:page standardController="Job_Application__c">
+  <apex:variable value="{!Job_Application__c}" var="job"/>
+  <apex:variable value="{!Job_Application__c.Candidate__r}" var="candidate"/>
+  <apex:sectionHeader title="{!$ObjectType.Job_Application__c.label}" subtitle="{!job.name}"/>
+  <apex:form>
+    <apex:pageBlock title="Job Application Detail">
+      <apex:pageBlockButtons>
+        <apex:commandButton value="Edit" action="{!edit}"/>
+        <apex:commandButton value="Delete" action="{!delete}"/>
+        <apex:commandButton onclick="parent.window.location.href='{!URLFOR($Action.Job_Application__c.Clone,job.id)}'" value="Clone"/>        
+        <apex:commandButton onclick="parent.window.location.href='{!URLFOR($Action.Job_Application__c.Share,job.id)}'" value="Sharing"/>
+      </apex:pageBlockButtons>
+      <apex:pageBlockSection>
+        <apex:outputField value="{!job.name}"/>
+        <apex:outputField value="{!job.ownerId}"/>
+        <apex:outputField value="{!job.Candidate__c}"/>
+        <apex:outputField value="{!job.Status__c}"/>
+        <apex:outputField value="{!job.Position__c}"/>
+        <apex:outputField value="{!job.Stage__c}"/>
+        <apex:pageBlockSectionItem>
+          <apex:outputLabel value="Created By"/>
+          <apex:outputText> 
+            <apex:outputField value="{!job.CreatedById}"/>
+            , &nbsp;
+            <apex:outputField value="{!job.CreatedDate}"/>
+          </apex:outputText>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem>
+          <apex:outputLabel value="Last Modified By"/>
+          <apex:outputText> 
+            <apex:outputField value="{!job.LastModifiedById}"/>
+            , &nbsp;
+            <apex:outputField value="{!job.LastModifiedDate}"/>
+          </apex:outputText>
+        </apex:pageBlockSectionItem>
+      </apex:pageBlockSection>
+      <apex:pageBlockSection title="Candidate Information">
+        <apex:outputField value="{!job.Candidate__c}"/>
+        <apex:outputField value="{!job.candidate__r.Phone__c}"/>
+        <apex:pageBlockSectionItem>
+          <apex:outputLabel value="Name"/>
+          <apex:outputText value="{!candidate.First_Name__c} {!candidate.Last_Name__c}"/>
+        </apex:pageBlockSectionItem>
+        <apex:outputField value="{!candidate.Mobile__c}"/>
+        <apex:outputField value="{!candidate.Email__c}"/>
+      </apex:pageBlockSection>
+    </apex:pageBlock>
+  </apex:form>
+  <apex:relatedList list="OpenActivities"/>
+  <apex:relatedList list="ActivityHistories"/>
+  <apex:relatedList list="NotesAndAttachments"/>
+  <apex:relatedList list="Reviews__r"/>
+</apex:page>

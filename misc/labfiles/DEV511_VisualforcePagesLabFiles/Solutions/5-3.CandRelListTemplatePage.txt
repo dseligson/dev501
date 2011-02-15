@@ -1,0 +1,6 @@
+<apex:page standardController="Candidate__c">
+  <apex:relatedList list="OpenActivities" />
+  <apex:relatedList list="ActivityHistories" />
+  <apex:relatedList list="NotesAndAttachments" />
+  <apex:relatedList list="Job_Applications__r" />
+</apex:page>

@@ -1,0 +1,4 @@
+  .highlight2{ background-color: #ffffff }
+  .candidate{ font-weight: bold; background-color: #ffffff }
+  .score{ font-weight: bold; background-color: #ffffff}
+  td.avg{font-weight: bold; color: red}

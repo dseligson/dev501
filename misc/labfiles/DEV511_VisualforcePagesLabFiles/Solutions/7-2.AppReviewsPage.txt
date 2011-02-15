@@ -1,0 +1,69 @@
+<apex:page controller="AppReviews" id="p" sidebar="false" showHeader="false" tabStyle="Position__c">
+    <!--Uses a custom controller called AppReviewsController to display a table of each Job Applicant's interview results by interview role. Clicking each score displays detailed results for that interview.-->
+    <apex:stylesheet value="{!$Resource.AppReviewsStyles}" />
+    <apex:form id="f">
+        <apex:pageMessage strength="1" severity="info" summary="Click any cell to see review details"/>
+        <apex:actionStatus id="status" startText="Requesting Review Details..." stopText="" />
+        <apex:actionFunction name="showReviews" action="{!reviewsOfType}" rerender="reviewBlockSection" status="status">
+            <apex:param name="a" assignTo="{!JobAppId}" value="" />
+            <apex:param name="b" assignTo="{!reviewType}" value="" />
+        </apex:actionFunction>
+        <apex:pageBlock mode="detail" id="pb" title="Job Applicant Interview Results" tabStyle="Position__c">
+        <apex:dataTable value="{!JobApps}" var="job" cellspacing="0" cellpadding="10" id="mt" >
+            <apex:column headerValue="Candidate" >
+                <apex:outputText value="{!job.Candidate__r.First_Name__c} {!job.Candidate__r.Last_Name__c}" id="candidate" />
+            </apex:column>
+            <apex:column styleClass="avg" headerValue="Avg Review Score">
+                <apex:outputText value="{!job.Average_Review_Score__c}" id="avg" />
+            </apex:column>
+            <apex:column id="g" onmouseout="this.className='td'" headerValue="General" onmouseover="this.className='score';" onclick="showReviews('{!job.id}','General');">           
+                <apex:dataTable value="{!job.Reviews__r}" var="r" styleClass="tableClass" cellspacing="0" cellpadding="0" id="gt">
+                    <apex:column rendered="{! r.Interviewer__r.Role__c == 'General'}" id="gg"  >
+                        <apex:outputText value="{!IF(r.Interviewer__r.Role__c = 'General',TEXT(r.Overall_Score__c),'')}" id="gval" />                               
+                    </apex:column>
+                </apex:dataTable>
+            </apex:column>
+            <apex:column onmouseout="this.className='td'" headerValue="Functional" onmouseover="this.className='score';" onclick="showReviews('{!job.id}','Functional');">
+                <apex:dataTable value="{!job.Reviews__r}" var="r" styleClass="tableClass" cellspacing="0" cellpadding="0">
+                    <apex:column rendered="{! r.Interviewer__r.Role__c == 'Functional'}">
+                        <apex:outputText value="{!IF(r.Interviewer__r.Role__c = 'Functional',TEXT(r.Overall_Score__c),'')}" id="functional" />
+                    </apex:column>
+                </apex:dataTable>
+            </apex:column>
+            <apex:column onmouseout="this.className='td'" headerValue="Technical" onmouseover="this.className='score';" onclick="showReviews('{!job.id}','Technical');">
+                <apex:dataTable value="{!job.Reviews__r}" var="r" styleClass="tableClass" cellspacing="0" cellpadding="0">
+                    <apex:column rendered="{! r.Interviewer__r.Role__c == 'Technical'}" >
+                        <apex:outputText value="{!IF(r.Interviewer__r.Role__c = 'Technical',TEXT(r.Overall_Score__c),'')}" id="technical" />
+                    </apex:column>
+                </apex:dataTable>
+            </apex:column>
+            <apex:column onmouseout="this.className='td'" headerValue="Managerial" onmouseover="this.className='score';" onclick="showReviews('{!job.id}','Managerial');">
+                <apex:dataTable value="{!job.Reviews__r}" var="r" styleClass="tableClass" cellspacing="0" cellpadding="0">
+                    <apex:column rendered="{! r.Interviewer__r.Role__c == 'Managerial'}" >
+                        <apex:outputText value="{!IF(r.Interviewer__r.Role__c = 'Managerial',TEXT(r.Overall_Score__c),'')}" id="managerial" />
+                    </apex:column>
+                </apex:dataTable>
+            </apex:column>
+         </apex:dataTable>              
+        <apex:pageBlockSection title="{!ReviewType} Review Details for {!CandidateName}" id="reviewBlockSection">
+            <apex:pageBlockTable value="{!Reviews}" var="rev" styleClass="tableClass" cellspacing="10" cellpadding="10">
+                <apex:column headerValue="Interviewer">
+                    <apex:outputText value="{!rev.Interviewer__r.Employee__r.Name}"/>
+                </apex:column>
+                <apex:column headerValue="Cultural Fit">
+                    <apex:outputText value="{!rev.Cultural_Fit__c}"/>
+                </apex:column>
+                <apex:column headerValue="Experience">
+                    <apex:outputText value="{!rev.Experience__c}"/>
+                </apex:column>
+                <apex:column headerValue="Leadership Skills">
+                    <apex:outputText value="{!rev.Leadership_Skills__c}"/>
+                </apex:column>
+                <apex:column headerValue="Recommended For Hire">
+                    <apex:outputText value="{!rev.Recommend_for_Hire__c}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>   
+        </apex:pageBlock>     
+    </apex:form>
+</apex:page>

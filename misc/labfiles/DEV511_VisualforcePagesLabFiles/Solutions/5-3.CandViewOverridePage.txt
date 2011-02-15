@@ -1,0 +1,26 @@
+<apex:page standardController="Candidate__c" sidebar="false">
+    <apex:variable value="{!Candidate__c}" var="c" />
+    <apex:composition template="CandTemplate" rendered="true">
+        <apex:define name="header">
+            <apex:sectionHeader title="{!$ObjectType.Candidate__c.label}" 
+                 subtitle="{!Candidate__c.First_Name__c} {!Candidate__c.Last_Name__c}"/>         
+        </apex:define>
+        <apex:define name="details">
+            <apex:form >
+            <apex:pageBlock >
+                <apex:pageBlockSection title="Employment Information" columns="2">
+                    <apex:outputField value="{!c.Currently_Employed__c}" />
+                    <apex:outputField value="{!c.Current_Employer__c}" />
+                    <apex:outputField value="{!c.Years_of_Experience__c}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Additional Details" columns="2">
+                    <apex:outputField value="{!c.US_Citizen__c}" />
+                    <apex:outputField value="{!c.Education__c}" />
+                    <apex:outputField value="{!c.Visa_Required__c}" />
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            </apex:form>
+        </apex:define>
+    </apex:composition>  
+    <apex:include pageName="CandRelListTemplate" rendered="true" />
+</apex:page>

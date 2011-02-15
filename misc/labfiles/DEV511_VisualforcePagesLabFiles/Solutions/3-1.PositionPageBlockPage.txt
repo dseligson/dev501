@@ -1,0 +1,79 @@
+<apex:page standardController="Position__c" title="Sample Position Layout Page" showHeader="true" sidebar="true" >
+<!--This is a simple page that mimics a standard Position Page Layout using Visualforce pageBlock tags.-->
+<script>
+    function myClone(){
+        window.top.location="{!URLFOR($Action.Position__c.Clone,Position__c.Id)}";
+    }
+</script>
+    <apex:sectionHeader title="{!$ObjectType.Position__c.label}" subtitle="{!Position__c.name}"/>
+  <apex:form >
+      <apex:pageBlock title="Position Detail">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Edit" action="{!edit}"/>
+            <apex:commandButton value="Delete" action="{!delete}"/>
+            <apex:commandButton value="Clone" onclick="javascript:myClone();" />
+            <apex:commandButton value="Sharing" onclick="window.top.location='{!URLFOR($Action.Position__c.Share,Position__c.Id)}'" />
+        </apex:pageBlockButtons>
+        <apex:pageBlockSection title="Information" columns="2">
+            <apex:outputField value="{!Position__c.name}"/>
+            <apex:outputField value="{!Position__c.ownerid}"/>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Record Type"/>
+                <apex:outputText >
+                    {!Position__c.RecordType.Name}&nbsp;<apex:outputLink value="#" id="recordtype">[Change]</apex:outputLink>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:outputField value="{!Position__c.Priority__c}"/>
+            <apex:outputField value="{!Position__c.Location__c}"/>
+            <apex:outputField value="{!Position__c.Status__c}"/>
+            <apex:outputField value="{!Position__c.Type__c}"/>
+            <apex:outputField value="{!Position__c.Sub_Status__c}"/>
+            <apex:outputField value="{!Position__c.Department__c}"/>
+            <apex:outputField value="{!Position__c.Start_Date__c}"/>
+            <apex:outputField value="{!Position__c.Pay_Grade__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!Position__c.Hiring_Manager__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!Position__c.Duration__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!Position__c.Legacy_Position_Number__c}"/>
+            <apex:pageBlockSectionItem />
+            <apex:outputField value="{!Position__c.Days_Opened__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Technical Skills" columns="2">
+            <apex:outputField value="{!Position__c.Operating_Systems__c}"/>
+            <apex:outputField value="{!Position__c.Programming_Languages__c}"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="Description" columns="1">
+            <apex:outputField value="{!Position__c.Job_Description__c}" />
+            <apex:outputField value="{!Position__c.Responsibilities__c}" />
+            <apex:outputField value="{!Position__c.Skills_Required__c}" />
+            <apex:outputField value="{!Position__c.Education__c}" />
+        </apex:pageBlockSection>
+        <apex:pageBlockSection title="System Information" showHeader="false" columns="2">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Created By"/>
+                <apex:outputText > 
+                    <apex:outputField value="{!Position__c.CreatedById}"/>
+                    ,&nbsp;   
+                    <apex:outputField value="{!Position__c.CreatedDate}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Last Modified By"/>
+                <apex:outputText > 
+                    <apex:outputField value="{!Position__c.LastModifiedById}"/>
+                    ,&nbsp;
+                    <apex:outputField value="{!Position__c.LastModifiedDate}"/>
+                </apex:outputText>
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+     </apex:pageBlock>
+  </apex:form>
+  <apex:relatedList list="Interviewers__r"/>
+  <apex:relatedList list="Job_Applications__r"/>
+  <apex:relatedList list="OpenActivities"/>
+  <apex:relatedList list="ActivityHistories"/>
+  <apex:relatedList list="NotesAndAttachments"/>
+  <apex:relatedList list="Position_Programming_Languages__r"/>
+</apex:page>

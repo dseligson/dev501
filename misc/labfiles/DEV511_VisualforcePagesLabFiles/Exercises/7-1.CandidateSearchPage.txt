@@ -1,0 +1,5 @@
+<!-- TODO: Add the page tag with the appropriate controller attribute -->
+
+	<!-- TODO: Add the top portion of the page to accept search data and have a Go button.  Look at the picture in the exercise guide for help.  You will need to look at the controller to figure out the custom action to be called.  You will also need to rerender the lower section of the page when the button is clicked. Include an action status to display "requesting..." while the page is being rerendered.  -->
+
+	<!-- TODO: Add the table for the lower portion of the page, including a column for the candidate first name, last name, and email.  Only display the table if the search result set is not null. -->

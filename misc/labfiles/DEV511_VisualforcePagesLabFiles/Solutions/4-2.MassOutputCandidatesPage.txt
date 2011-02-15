@@ -1,0 +1,41 @@
+<apex:page standardController="Position__c" >
+  <!-- the first example, below, demonstrates the use of the pageBlockTable tag to display a mash-up list of Job Application & Candidate information -->
+  <!--   this is important because we did not have to burn custom fields in order to pull in the candidate info for display -->
+  <!-- also notice that the formatting is taken care of for you when using the pageBlockTable tag -->
+  <apex:pageBlock >
+      <apex:pageBlockTable value="{!Position__c.Job_Applications__r}" var="item">
+          <apex:column value="{!item.name}"/> 
+          <apex:column value="{!item.Status__c}"/>
+          <apex:column value="{!item.Stage__c}"/>
+          <apex:column value="{!item.Candidate__r.name}"/>
+          <apex:column value="{!item.Candidate__r.First_Name__c} {!item.Candidate__r.Last_Name__c}" headerValue="Candidate Name" />
+          <apex:column value="{!item.Candidate__r.Email__c}"/>
+          <apex:column value="{!item.Candidate__r.Phone__c}"/>
+      </apex:pageBlockTable> 
+  </apex:pageBlock>
+  <!-- the example below demonstrates the use of the dataTable tag to display the same information as the first example above -->
+  <!--   notice that formatting is not handled for you when using the dataTable tag, and we need to explicitly declare column heading labels -->
+  <apex:dataTable value="{!Position__c.Job_Applications__r}" var="job">
+      <apex:column headerValue="Job Application Name" >
+          <apex:outputText value="{!job.name}"/>
+      </apex:column>
+      <apex:column headerValue="Status">
+          <apex:outputText value="{!job.Status__c}"/>
+      </apex:column>
+      <apex:column headerValue="Stage">
+          <apex:outputText value="{!job.Stage__c}"/>
+      </apex:column>
+      <apex:column headerValue="Candidate Number">
+          <apex:outputText value="{!job.Candidate__r.name}"/>
+      </apex:column>
+      <apex:column headerValue="Candidate Name">
+          <apex:outputText value="{!job.Candidate__r.First_Name__c} {!job.Candidate__r.Last_Name__c}"/>
+      </apex:column>
+      <apex:column headerValue="Candidate Email">
+          <apex:outputText value="{!job.Candidate__r.Email__c}"/>
+      </apex:column>
+      <apex:column headerValue="Candidate Phone">
+          <apex:outputText value="{!job.Candidate__r.Phone__c}"/>
+      </apex:column>
+  </apex:dataTable>
+</apex:page>

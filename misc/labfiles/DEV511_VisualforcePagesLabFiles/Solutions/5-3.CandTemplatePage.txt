@@ -1,0 +1,83 @@
+<apex:page standardController="Candidate__c">
+<style type="text/css">
+
+    table.topTable{
+        border: 1px solid #d95d2e;
+    }
+    
+    table.topTable td.photoCol{
+        text-align: right;
+        vertical-align: middle;
+    }
+    
+    table.topTable td.fieldsCol{
+        text-align: left;
+        vertical-align: middle;
+    }
+    
+    table.photo{
+        text-align: center;
+        vertical-align: middle;
+    }
+    
+    table.data{
+        vertical-align: middle;
+    }
+    
+    table.data td.label{
+        text-align: right;
+        font-weight: bold;
+        font-size: 1.5em;
+    }
+    
+    table.data td.data{
+        text-align: left;
+        font-size: 1.5em;
+    }
+    
+    h1.photo {
+        font-size: 2em;
+    }
+    
+</style>
+    <apex:insert name="header"/>
+    <!-- After the header show the photo and top level data -->
+    <apex:panelGrid columns="2" id="topTable" width="100%" border="1" 
+                    frame="box" rules="none" 
+                    styleClass="topTable" columnClasses="photoCol,fieldsCol"
+                    cellpadding="5" cellspacing="5">   
+        <!-- Picture Column -->    
+        <apex:panelGrid columns="1" id="pictureGrid" styleClass="photo" width="100%"
+                        cellpadding="10" cellspacing="10">
+            <apex:image url="{!Candidate__c.Picture_URL__c}"/>
+            <apex:outputText >
+                <hr width="80%"/>
+                <h1 class="photo">{!Candidate__c.First_Name__c}&nbsp;{!Candidate__c.Last_Name__c}</h1>
+            </apex:outputText>
+        </apex:panelGrid>      
+        <apex:panelGrid columns="1" id="dataGrid" >
+            <apex:panelGroup >
+                <apex:panelGrid columns="2" styleClass="data" columnClasses="label,data">
+                    <apex:outputLabel value="Phone:" />
+                    <apex:outputField value="{!Candidate__c.Phone__c}"/>
+                    <apex:outputLabel value="Mobile:"/>
+                    <apex:outputField value="{!Candidate__c.Mobile__c}"/>
+                    <apex:outputLabel value="Fax:"/>
+                    <apex:outputField value="{!Candidate__c.Fax__c}"/>
+                    <apex:outputLabel value="Email:"/>
+                    <apex:outputField value="{!Candidate__c.Email__c}" />  
+                    <apex:outputLabel value="Gender:"/>
+                    <apex:outputField value="{!Candidate__c.Gender__c}"/> 
+                </apex:panelGrid>  
+            </apex:panelGroup>
+        </apex:panelGrid>
+    </apex:panelGrid>
+    <!-- Address Map -->
+    <apex:panelGrid columns="1" id="mapGrid" width="100%" border="1" frame="box" rules="none" 
+                    styleClass="photo" cellpadding="10" cellspacing="10" >       
+        <apex:iframe src="http://maps.google.com/maps?q={!Candidate__c.Street_Address_1__c }+{!Candidate__c.City__c }+{!Candidate__c.State_Province__c }" 
+                height="450px" width="80%" frameborder="false"/>
+    </apex:panelGrid>
+    <!-- after the Map let the user add details -->
+    <apex:insert name="details"/>
+</apex:page>

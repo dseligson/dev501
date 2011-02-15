@@ -1,0 +1,55 @@
+public class AppReviews{
+
+    private final String posId;
+    
+    // The extension constructor initializes the private member
+    // variable pos by using the getRecord method from the standard
+    // controller.
+    public AppReviews() {
+        this.posId= System.currentPageReference().getParameters().get('posId');
+    }
+    
+    public List<Job_Application__c> JobApps {
+        get{
+            if (JobApps == null){
+                jobApps = new List<Job_Application__c>([select j.id, j.Candidate__c, j.Stage__c, j.Status__c, j.Average_Review_Score__c, j.Candidate__r.First_Name__c, j.Candidate__r.Last_Name__c, (Select Id, Alternate_Position__c, Cultural_Comments__c, Cultural_Fit__c, Experience__c, Experience_Comments__c, Interviewer__c, Job_Application__c, Leadership_Comments__c, Leadership_Skills__c, Overall_Score__c, Recommend_for_Hire__c, r.Interviewer__r.Role__c, r.Interviewer__r.Employee__r.Name From Reviews__r r) from Job_Application__c j where Position__c=:posId]);
+            }
+            return jobApps;
+        }
+        set;
+    }
+    public ID JobAppId {get;set;}
+    public String reviewType { get;set; }
+    public String candidateName {get;set;}
+    
+    public Review__c[] reviews { get; set; }
+    
+    public PageReference reviewsOfType(){
+        // this function sorts through a job application's list of review records and creates a list of reviews all of the same Type
+        //  the Type is determined by the "reviewType" variable 
+        Boolean bFound = false;
+        Integer index = 0;
+        if (jobApps.size() > 0){
+            while((!bFound) && (index < jobApps.size())){               
+                if (jobApps[index].Id == JobAppId){
+                    bFound = true;
+                } else {
+                    index++;
+                }
+            }
+            if(bFound){
+                Job_Application__c job = jobApps[index];
+                candidateName = job.Candidate__r.First_Name__c + ' ' + job.Candidate__r.Last_Name__c;
+                if (job.Reviews__r != null) {
+                    reviews = new List<Review__c>();
+                    for (Review__c review:job.Reviews__r){
+                        if (review.Interviewer__r.Role__c == reviewType) reviews.add(review);
+                    }
+                } else {            
+                    reviews = null;
+                }   
+            } else { candidateName = null; reviews = null; }
+        }                   
+        return null;
+    }
+}

@@ -1,0 +1,14 @@
+<apex:page standardController="Position__c" >
+    <!-- This example demonstrates the differences between the pageBlockTable and dataTable tags. this page could be used as an inline s-control on a Position Layout or it could be launched in a new window from a link/button on a Position Layout.-->
+  <apex:pageBlock >
+      <!--TODO: Construct a table using the pageBlockTable and column tags for the Job Application Name, Status and Stage, as well as the Candidate First and Last Name, Email, and Phone.  Note: the Candidate's full name should only take up one cell. -->
+
+
+
+  </apex:pageBlock>
+  <!--TODO: Now do the same thing using the dataTable and outputText tags that do not provide the default Salesforce formating.  Note: you will need to provide the column headers.-->
+
+
+
+
+</apex:page>

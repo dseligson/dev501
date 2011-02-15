@@ -1,0 +1,59 @@
+<apex:page standardController="Review__c"> 
+    <!-- componentized the flash slider.  Component does not use a controller, see "slider" Component.-->
+    <apex:sectionHeader title="{!$ObjectType.Review__c.label}" subtitle="{!Review__c.name}"/>
+    <apex:form id="theForm">
+        <apex:pageBlock mode="edit" title="Review Edit" id="reviewBlock" >
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection id="info" showHeader="true" title="Information" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recommend For Hire"/>
+                    <apex:selectRadio value="{!Review__c.Recommend_for_Hire__c}">
+                        <apex:selectOption itemValue="true" itemLabel="Yes"/>
+                        <apex:selectOption itemValue="false" itemLabel="No"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Reason_Recommended__c}" style="width: 515px"/>
+                <apex:outputField value="{!Review__c.Job_Application__c}"/>
+                <apex:inputField value="{!Review__c.Interviewer__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection id="scores" showHeader="true" title="Scores" columns="1">
+                <apex:inputHidden id="cFit" value="{!Review__c.Cultural_Fit__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Cultural Fit"/>                                            
+                      <!-- TODO: Add a tag for the slider using the attributes you defined -->
+			
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Cultural Comments"/>
+                    <apex:inputTextArea value="{!Review__c.Cultural_Comments__c}" rows="5" cols="100"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputHidden id="exp" value="{!Review__c.Experience__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Experience"/>                                            
+                      <!-- TODO: Add a tag for the slider using the attributes you defined -->
+
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Experience Comments"/>
+                    <apex:inputTextArea value="{!Review__c.Experience_Comments__c}" rows="5" cols="100"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputHidden id="leadership" value="{!Review__c.Leadership_Skills__c}" />
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Leadership Skills"/>                      
+                      <!-- TODO: Add a tag for the slider using the attributes you defined -->                                         
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Leadership Comments"/>
+                    <apex:inputTextArea value="{!Review__c.Leadership_Comments__c}" rows="5" cols="100"/>
+                </apex:pageBlockSectionItem> 
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Alternate Position"/>
+                    <apex:inputTextArea value="{!Review__c.Alternate_Position__c}" rows="5" cols="100"/>
+                </apex:pageBlockSectionItem>       
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,15 @@
+<apex:page standardController="Position__c">
+  <b>Hello {!$User.FirstName}!</b> <br/> <br/>
+  <apex:variable var="p" value="{!Position__c}"/>
+  <apex:form>
+    <apex:pageBlock title="Quick Edit" tabStyle="Zip_Code__c">
+      <apex:pageBlockSection columns="3">
+        <apex:inputField value="{!p.name}"/> 
+        <apex:inputField value="{!p.Status__c}"/> 
+        <apex:commandButton action="{!save}" value="Update"/>
+      </apex:pageBlockSection>
+    </apex:pageBlock>  
+  </apex:form>
+  <apex:detail relatedList="false"/>
+  <apex:relatedList list="Job_Applications__r" />
+</apex:page>

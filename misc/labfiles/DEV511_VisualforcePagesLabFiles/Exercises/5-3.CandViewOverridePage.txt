@@ -1,0 +1,29 @@
+<!-- TODO: Add the page tag with the appropriate controller, being sure to disable the sidebar -->
+
+    <!-- TODO:  Add the template tag to include content from the CandTemplate page -->
+
+        <!-- TODO: Add the template tag to pass the "header" information in the template -->
+ 
+            <apex:sectionHeader title="{!$ObjectType.Candidate__c.label}" 
+                 subtitle="{!Candidate__c.First_Name__c} {!Candidate__c.Last_Name__c}"/>         
+
+        <!-- TODO: Add the template tag to include the "details" information in the template -->
+
+            <apex:form >
+            <apex:pageBlock >
+                <apex:pageBlockSection title="Employment Information" columns="2">
+                    <apex:outputField value="{!Candidate__c.Currently_Employed__c}" />
+                    <apex:outputField value="{!Candidate__c.Current_Employer__c}" />
+                    <apex:outputField value="{!Candidate__c.Years_of_Experience__c}" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection title="Additional Details" columns="2">
+                    <apex:outputField value="{!Candidate__c.US_Citizen__c}" />
+                    <apex:outputField value="{!Candidate__c.Education__c}" />
+                    <apex:outputField value="{!Candidate__c.Visa_Required__c}" />
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            </apex:form>
+
+    <!-- TODO: Add the template tag to include content from the CandRelListTemplate page -->
+
+</apex:page>

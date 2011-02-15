@@ -1,0 +1,59 @@
+<apex:page standardController="Review__c">
+    <!-- Custom Review__c edit page that demonstrates the various types of <input> tags available in vforce.-->
+    <apex:sectionHeader title="{!$ObjectType.Review__c.label}" subtitle="{!Review__c.name}"/>
+    <apex:form >
+        <apex:pageBlock mode="edit"  title="Review Edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection showHeader="true" title="Information" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Recommend For Hire"/>
+                    <apex:selectRadio value="{!Review__c.Recommend_for_Hire__c}">
+                        <apex:selectOption itemValue="true" itemLabel="Yes"/>
+                        <apex:selectOption itemValue="false" itemLabel="No"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Reason_Recommended__c}" style="width: 515px"/>
+                <apex:outputField value="{!Review__c.Job_Application__c}"/>
+                <apex:inputField value="{!Review__c.Interviewer__c}"/>
+            </apex:pageBlockSection>
+            <apex:pageBlockSection showHeader="true" title="Scores" columns="1">
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Cultural Fit"/>
+                    <apex:selectRadio value="{!Review__c.Cultural_Fit__c}" >
+                        <apex:selectOption itemValue="{!VALUE('1.0')}" itemLabel="1" />
+                        <apex:selectOption itemValue="{!VALUE('2.0')}" itemLabel="2" />
+                        <apex:selectOption itemValue="{!VALUE('3.0')}" itemLabel="3" />
+                        <apex:selectOption itemValue="{!VALUE('4.0')}" itemLabel="4" />
+                        <apex:selectOption itemValue="{!VALUE('5.0')}" itemLabel="5" />
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Cultural Comments"/>
+                    <apex:inputTextArea value="{!Review__c.Cultural_Comments__c}" rows="10" cols="100"/>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Experience"/>
+                    <apex:selectList value="{!Review__c.Experience__c}" size="1">
+                        <apex:selectOption itemValue="1.0" itemLabel="1"/>
+                        <apex:selectOption itemValue="2.0" itemLabel="2"/>
+                        <apex:selectOption itemValue="3.0" itemLabel="3"/>
+                        <apex:selectOption itemValue="4.0" itemLabel="4"/>
+                        <apex:selectOption itemValue="5.0" itemLabel="5"/>
+                    </apex:selectList>
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Experience Comments"/>
+                    <apex:inputTextArea value="{!Review__c.Experience_Comments__c}" rows="10" cols="100"/>
+                </apex:pageBlockSectionItem>
+                <apex:inputField value="{!Review__c.Leadership_Skills__c}"/>
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Leadership Comments"/>                  
+                    <apex:inputField value="{!Review__c.Leadership_Comments__c}" style="width: 515px"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

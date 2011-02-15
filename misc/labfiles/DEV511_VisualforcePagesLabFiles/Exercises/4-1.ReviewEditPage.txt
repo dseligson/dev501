@@ -1,0 +1,43 @@
+<apex:page standardController="Review__c">
+    <!-- Custom Review__c edit page that demonstrates the various types of <input> tags available in vforce.-->
+    <apex:sectionHeader title="{!$ObjectType.Review__c.label}" subtitle="{!Review__c.name}"/>
+    <apex:form >
+        <apex:pageBlock mode="edit"  title="Review Edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection showHeader="true" title="Information" columns="1">
+                <apex:pageBlockSectionItem >
+		    <!-- TODO: Add a radio button set (true, false) for the Recommend for Hire field.  Remember the label!-->
+
+                </apex:pageBlockSectionItem>
+		<!-- TODO: Add fields for the Reason Recommended, Job Application and the Interviewer data -->
+
+            </apex:pageBlockSection>
+            <apex:pageBlockSection showHeader="true" title="Scores" columns="1">
+                <apex:pageBlockSectionItem >
+ 		    <!-- TODO: Add a radio button set for the Cultural Fit field. -->
+
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+		    <!-- TODO: Add an text area field for the Cultural Comments field -->
+
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+                    <!-- TODO: Add a picklist for the Experience field -->
+
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem >
+		    <!-- TODO: Add a text area for the Experience Comments field -->
+
+                </apex:pageBlockSectionItem>
+                <!-- TODO: Add the Leadership Skills field using the default widget --> 
+                <apex:pageBlockSectionItem >
+		    <!-- TODO: Add widgets for the Leadership Comments field using the default widget -->
+
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

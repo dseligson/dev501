@@ -1,0 +1,43 @@
+<!--Uses a custom controller called AppReviewsController to display a table of each Job Applicant's interview results by interview role. Clicking each score displays detailed results for that interview.-->
+<!-- TODO: Add the page attributes.  Remember that we do not want some of the standard Salesforce page features -->
+<apex:page controller="AppReviews">
+    <!-- TODO: Add the static resource for the stylesheet -->
+
+    <apex:form id="f">
+    <!-- TODO: Add a message with the text to "Click any cell to see review details." -->
+
+        <apex:actionStatus id="status" startText="Requesting Review Details..." stopText="" />
+        <apex:actionFunction name="showReviews" action="{!reviewsOfType}" rerender="reviewBlockSection" status="status">
+            <apex:param name="a" assignTo="{!JobAppId}" value="" />
+            <apex:param name="b" assignTo="{!reviewType}" value="" />
+        </apex:actionFunction>
+        <apex:pageBlock mode="detail" id="pb" title="Job Applicant Interview Results" tabStyle="Position__c">
+        <apex:dataTable value="{!JobApps}" var="job" cellspacing="0" cellpadding="10" id="mt" >
+            <apex:column headerValue="Candidate" >
+                <apex:outputText value="{!job.Candidate__r.First_Name__c} {!job.Candidate__r.Last_Name__c}" id="candidate" />
+            </apex:column>
+            <apex:column styleClass="avg" headerValue="Avg Review Score">
+                <apex:outputText value="{!job.Average_Review_Score__c}" id="avg" />
+            </apex:column>
+            <!-- TODO: add to the following column component the onclick action to display reviews, passing in the job id and the string "General" -->
+            <apex:column id="g" onmouseout="this.className='td'" headerValue="General" onmouseover="this.className='score';">   
+            <apex:dataTable value="{!job.Reviews__r}" var="r" styleClass="tableClass" cellspacing="0" cellpadding="0" id="gt">
+
+            <!-- TODO: Add a column component that is rendered if the Interviewer Role is equal to "General" and then create an output component for the overall score for the general interviews -->
+
+                </apex:dataTable>
+            </apex:column>
+
+            <!-- TODO: Repeat the above column component for the Functional, Technical, and Managerial reviewers -->
+
+           </apex:dataTable>              
+        <apex:pageBlockSection title="{!ReviewType} Review Details for {!CandidateName}" id="reviewBlockSection">
+            <apex:pageBlockTable value="{!Reviews}" var="rev" styleClass="tableClass" cellspacing="10" cellpadding="10">
+
+            <!-- TODO: Create the lower data table that is rendered when the review.id is not null and include the four rating fields: Cultural Fit, Experience, Leadership Skills, and Recommend for Hire-->
+
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>   
+        </apex:pageBlock>     
+    </apex:form>
+</apex:page>

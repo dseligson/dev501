@@ -1,0 +1,9 @@
+<apex:component>
+    <!-- A re-usable flash slider component that does not use a controller.-->
+
+    <!-- TODO: Add a JavaScript script tag to create a JavaScript function to update the hidden values that takes the value and the id -->
+    <!-- TODO: Add attributes for startValue, min, max, snapInterval (how many units the slider can move by), callbackFunction, passthroughId, bgColor (default #F3F3EC), height (default 40), and width (default 175)-->
+
+    <!-- TODO: Add a flash tag to call the slider, using the attributes identified above (via the expression syntax) -->
+                         
+</apex:component>
