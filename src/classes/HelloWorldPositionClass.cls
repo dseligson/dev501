@@ -7,6 +7,7 @@ public class HelloWorldPositionClass {
 				updateList.add(p);
 			}
 		}
+		update updateList;
 	}
 
 
