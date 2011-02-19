@@ -1,0 +1,31 @@
+VisualForce Controllers
+3-1
+What is the defining feature of a controller extension?  What is the syntax? It contains a constructor that takes another controller as an argument.  An example: public myControllerExtension(ApexPages.StandardController stdController) 
+What is the pattern for making the page and controller work for two different overrides? Use a Boolean flag to track whether the record is new or an update. 
+3-2
+What is the purpose of overriding the save method? To insert the createJobAppandTask() method into the save process and to cover both inserts and updates.
+How are the Department values being populated? Using a “describe” call.  Show the code to the students.
+3-3
+Why do you have to code a cancel method? As this is a custom controller, none of the standard controller methods are included automatically with this controller.
+What are some of the common patterns used within getters and setters for controllers? Answers will vary.  Some responds may include: automatic properties, getters that initialize the first time if values are null, setters that apply the value from the page, getters that use a SOQL statement to retrieve data, etc.
+3-4
+What advantage does this wrapper pattern have?  When would you need to use it? The wrapper allows you to add a property that is only used in a specific situation, and does not store data past that situation.  In this case, it adds a property to allow for the selection of the record in a list of records.
+What is an alternate solution to using this wrapper solution?  What would be factors regarding which method you should choose? Answers could vary.  You could create a custom field to store the information instead of wrapping it in a class.  In this particular case, however, that would not work as well as multiple people hitting the same list at the same time could cause a problem.  The main factors to consider are if the data should be persisted permanently and if it’s more of a question of “state” and might need to be different for multiple users hitting the situation at the same time.
+4-1
+How is the state maintained by the wizard between steps? By creating properties in the controller and using the same controller over the entire wizard.  
+How is the navigation handled by the wizard?  What might be some improvements you could make? An example:
+ public PageReference step3() {
+        if (jobApplication.Position__c == null){
+            return Page.jobAppStep1;
+        } else if (candidate.last_name__c == null){
+            return Page.jobAppStep2;
+        } else{
+            return Page.jobAppStep3;
+        }
+This checks for specific validations to make sure that specific conditions exist before moving on.  There is just a Next and Previous button at the bottom of the page.  One possible improvement would be to create a picklist to allow you to jump to specific steps and other more advanced pagination techniques.  
+4-2
+When do you need to have a controller to accompany a custom component?  Answers may vary, but a general answer is that you need a component controller if you need to have programmatic logic to determine how to render the component.
+How could dynamic Apex help to improve on this design?  This component is currently specific to the programming languages, but with dynamic Apex, we should be able to create a more generic “list component” that can be used with any type of SObject.
+4-3
+What is the syntax for declaring test methods?  What is the method and syntax for verifying your test statements? Test method declaration example: public static testMethod void testMyController() { }.  Testing method example: System.assert(results.size() > 0);
+What must be done after adding parameters to the URL string in test methods? You have to reinstanciate the controller and from there reinstantiate the object from the controller.

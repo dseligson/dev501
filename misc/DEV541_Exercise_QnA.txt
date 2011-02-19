@@ -1,0 +1,60 @@
+Apex
+1-1
+Do you have to use the Force.com IDE for Salesforce development? Is there another option? What might affect your decision?  No.  You can develop everything via the UI/Setup menu if you prefer.  Things that might affect your decision: working with a team of developers, working with a source control system, personal preference, extra Eclipse functionality, ability to save local copies, etc.
+1-2
+When would we use the Security Token in the connection information? When logging in (even through the API/Force.com IDE) and not within the trusted IP addresses.
+1-3
+Can this code handle bulk updates?  When would that be necessary?  Yes it can (notice that it accepts a list of positions and processes them all).  It might be necessary if data is being loaded through the Data Loader or other times multiple rows my be saved at once (other Web Services API applications or custom Visualforce pages).
+Could we have written this code by only creating a trigger? What would the decision depend on?  Yes.  The decision to move the heavy-lifting portion of the code to a class was done here in order to see an example of a trigger and a class together.  Some reasons why you might need to move to using a class in addition to a trigger would be if the code could be reused by other triggers.
+Why don’t you need an instance of the HelloWorldPositionClass to invoke its method? Because it has been declared as static.  This is common for methods that are thought of as functions.
+3-1
+Why didn’t UC simply put the salary information on the Position object, which would eliminate the need for this trigger? This was done as the users which should see salary information are much fewer than those that should see position information.  In order to lock down the salary in the sharing model, it was designed as a separate object.
+Why is it necessary to test for duplicate salary information within the trigger batch itself?  And why should you do that first before check for previously existing salary information data? The data may be entered via the API where many positions/salaries could be entered at once.  If you can eliminate the data as having a duplicate without needing to call into the database to check, the code is more efficient.
+4-1
+What might be an issue with creating a lot of automatic sharing Apex triggers? Several issues. Hitting governor limits for queries and dml statements is possible. Especially if there are a lot of job apps associated to the positions. Another issue is that we're only handling the triggers on the position record but really we would need to write triggers for the job app object and the candidate object as well. Also we would need to consider undelete events.
+6-1
+Should all of this code be in the trigger?  Should we call a class instead?  What might the decision depend on?  It’s ok that it’s all in the trigger, unless you somehow made the code more reusable.  In this case, it’s fine.  
+What object is actually being updated in the code and why? Job Application.  The offer object does not need updating as there is nothing you are doing to it.  Sometimes students lose track of what’s actually being done BY the code versus what INVOKES the code.
+6-2
+What is the purpose behind the formula field? Why does it have the LOWER function? The formula field acts as the unique key for the object.  No two records can have the exact same unique key.  The lower function makes it a case-insensitive key, but that is not required.
+You obviously do not have to use last name and email address.  What should be the thought process behind choosing fields to be part of the key field? The combination of whatever you pick is going to be unique.  Too many fields may mean that you end up with items that actually should be counted as duplicates not being caught by the trigger.  Too few can mean a lack of flexibility.  Take this into a discussion with the students if they have the time about what good options for this would be.
+6-3
+What happens in the case where the hiring manager is also the VP?  They should have the salary shared twice with two different sharing reasons (Hiring Manager & DepartmentVP)
+Why does this need to be set up on two different triggers? In this case, the data could be referenced from either side of the relationship.
+6-4
+Should this trigger handle inserts as well?  Why or why not? Probably not: positions need to go through an approval process first after being created, so the situation would never come up with the current set of business rules.
+What would be some options for integrating the Job_Posting__c records with a real job site API? It depends on what the sites have available.  If they have a WSDL available, you could consume that in Apex and use it to call out to the job site.  You could also create an external application that uses the API to monitor that object and communicate with the job site.  There are certainly other possibilities as well.
+6-5
+What are the object__share objects?  Does every object have one? They are the objects that store the fact that the record is shared with a particular user/role, etc.  Certain standard objects have them—ones that can be shared.  Custom objects CAN have them but only if the org-wide defaults are set to private.  
+Why is it important to include code to remove sharing?  At least two reasons: 1) data security/integrity: someone should no longer have access to the data 2) data performance: filling up the sharing tables with needless records that are never garbage-collected will hinder performance.
+7-1
+What did you need to do to ensure your method was treated as a test method? Ensure the method was adorned with the testMethod keyword as below:
+static testMethod void helloWorldTest()
+What exception type did you use to catch a possible DML exception? Why? DmlException: the reason being that we wanted to get the specific DML message of the error and to do that we needed to invoke method  getDmlMessage() belonging to the DmlException class
+8-1
+Can you test your deployment before actually executing the deployment? If so, how?Yes. In the deployment wizard (Step 3 of 4) there is a Validate Deployment button that will test your deployment before actually doing it to see if there are any errors or warnings.
+List a couple of good examples of when and why you would like to use the Force.com Component Deployment utility?Deploying from development to QA (role based deployment)Deploying to different organization typesTesting the deployment to an organization when you are uncertain state (of its objects versus the projects’)
+9-1
+How did we call our web service in this exercise?  How else could we call our custom web service? We called it from the AJAX Toolkit (within an S-Control) in the exercise.  We could also call it from another Apex class or from a client application that consumes the web service WSDL.
+Which access modifier must be used with web service methods and classes?  Public must be used for the web service method and Global must be used for the class containing the webservice method.
+9-2
+From where does the imported StrikeIron service get called?  How else could we have called the imported service? Called from a Visualforce page controller class.  We could also call it from an Async trigger, although we would have to carefully consider governor limits if we did that.  
+Not all WSDLs are supported by Force.com SOA.  Why was Force.com SOA able to import this StrikeIron WSDL so easily? Because the StrikeIron WSDL did not contain any unsupported schema types nor imports nor other currently unsupported WSDL features.
+9-3
+Why do we have the field AsyncValidationFlag on the Candidate object?  What illegal situation does it help us to prevent?  We set it to true with our Asynchronous callout method so that our trigger can check it to know if the update to the Candidate record is being caused by the callout method or by user interaction.  By using this flag field we avoid the illegal situation of an @future method causing another @future method to be called.
+Why did we write our trigger so that the asynchronous callout is only made when a single record is updated or inserted?  Why not write the trigger in batch, looping through the records to make the callout for each record in the trigger? Because the StrikeIron webservice we’re calling out to does not work in bulk, we would quickly run into our governor limit of 10 asynchronous method invocations per trigger if we called the asynchronous method in a loop over an entire trigger batch.
+10-1
+How was the Apex email handler class able to read in values from the inbound email body and map them to Salesforce object fields? The email handler class has to know the format the body of the email will come in.  The code therefore knows to look for the beginning and ending demarcations and also knows exactly which name/value pairs to expect in the body.  It’s a fairly hardcoded approach, but easy to implement.
+How were we, as developers, able to debug our inbound email code?  What are some pros and cons of this approach? We logged to a custom object called Error_Log__c.  Pro is being able to capture messages in a context we normally use the System Log in.  The con is that if a non-handleable error occurs nothing will be logged to the object.
+What architectural changes might you make to this email “integration” if you were to implement this using your real corporate website? Would have the web server submit the email directly once the user submits the form.  Would also add a field to the form for the candidate to enter in their email address (since the From of the email would then always be the web server’s email address).  Would also add client-side javascript validation to make sure the fields entered into the form were valid before submission.  Might also add some sort of spam filtering.
+10-2
+How did we create the htmlBody of our auto-response, and how might we improve the design so we can more easily make changes to the body of the email without touching the code? We used a helper function to build the HTML body.  In the future when using visualforce pages as templates is fully supported we could use a visualforce page to act as the template for our email content.
+If we wanted to include an attachment on our auto-response email, what are some ways we might go about doing that? We could create an email template using the declarative builder that has an attachment.  We could write code to pull out a Document record from the Document object.  When visualforce pages are fully supported as templates we could also use a visualforce page that is rendered as a pdf if we wanted to send a pdf attachment.
+11-1
+How did the code decide which fields to pull back in the dynamic query to show to the user? The fields are pulled in from the custom object Search_Config__c and then used dynamically in the dynamic SOQL query.
+How did the code determine what the field labels should be in the results table displayed to the user? The code does a describeGlobal to get the Map of SObjectTypes, then does a describe on the fields of that object to get the proper Labels from the DescribeFieldResult objects.
+11-2
+How is the Map of the department approvers created? The Map is created via a static initializer method.  Within the method a query is made for all the Position_Approval_Matrix__c records.  A for loop goes through the records and builds the Map using the Department name as the Key and the record as the Value. 
+Why are the approver fields set to null sometimes in the setPositionApprovers method? The fields are set to null because there was no Position_Approval_Matrix__c record corresponding to the Position record’s department.  This prevents incorrect approvers being set on the position in case the department of the position changes.
+
+

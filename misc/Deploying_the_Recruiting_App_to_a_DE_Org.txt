@@ -1,0 +1,36 @@
+The steps for deploying the DEV501 app from your training Org to a Development Edition (DE) Org are below.  
+	
+I.	Make Manual Additions to the DE Org
+	1. 	In the DE Org, manually create two Custom Objects:
+		a.	Position (Record Name = Title, Data Type = Text, Enable Reports, Activities, Field History Tracking and Notes and Attachments)
+		b.	Candidate (Record Name = Candidate Number, Data Type = Auto Number, Display Format = C-{0000}, Enable Reports, Activities, Field History Tracking and Notes and Attachments)
+	2. 	In the DE Org, manually create a Queue (Queue Name = Recruiter Queue, Selected Objects = Position and Candidate). Can be found under Manage Users - Queues.
+	3. 	In the DE Org, manually add the Social Security Number field to the Candidate Object (Data Type = Text, Field Label = Social Security Number, Length = 12) - note: DE Orgs do not support encryption
+	4. 	In the DE Org, manually change Org Wide Defaults (OWD) Sharing for Position & Candidate Objects to Private from Public Read/Write. Can be found under Security Controls->Sharing Settings.
+
+II. Make edits in the Force.com Project
+	5. 	If you have not already, create a Force.com project connected to your Training Org. If already setup, use "Refresh from Server" to update the local copy of your project with the latest from the server.
+	6.	Change to "Work Offline" mode. 
+	7.	Make changes to the project in Eclipse	
+		a.	Remove references in the Training Org Candidate object XML file to the Social Security Number field: <fields><fullName>Social_Security_Number__c</fullName><label>Social Security Number</label><length>12</length><maskChar>X</maskChar><maskType>ssn</maskType><type>EncryptedText</type></fields> 
+		b.	Change references in the Training Org Job Application Workflow for the <integrationUser> tag from admin@<YourTrainingDomainHere>.DevOrg to your user account at the DE Org
+
+III.	Deploy Training Project to DE Org via Force.com IDE. When deploying to server, use DE Org login credentials.
+	8.	Deploy to Server... Deselect all items, then Check All Custom Objects.
+	9.	Deploy to Server... the default selected items, but skip (uncheck) the items below:
+    a.	All Custom Apps
+    b. 	The Custom Object Idea
+		c.	All Custom Tabs
+    d.	All Dashboards
+    e.	All HomePage Components
+    f.	All HomePage Layouts
+    g.	The 4 Page Layouts which start with Css*
+    h.	All Profiles
+	10. 	Deploy to Server... Deselect all items, then Check...
+		a.	All Green Custom Applications
+		b.	All Green Custom Tabs
+
+IV.	Make final change to DE Org		
+	11.	In the DE Org, manually edit the Recruiting and Custom Administration apps - make visible to all Profiles.
+	12. Optionally, you can recreate the custom profiles and users to test the application with non-system administrators
+
